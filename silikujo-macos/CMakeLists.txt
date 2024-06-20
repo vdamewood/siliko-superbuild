@@ -60,7 +60,8 @@ target_link_libraries(SilikujoForMacOS
 		"-framework Cocoa"
 )
 
-if(SILIKO_BUILD_SHARED_LIBRARY)
+get_target_property(SILIKO_TYPE Siliko::Siliko TYPE)
+if (${SILIKO_TYPE} STREQUAL SHARED_LIBRARY)
 	set_target_properties(SilikujoForMacOS PROPERTIES
 		BUILD_WITH_INSTALL_RPATH        On
 		INSTALL_RPATH                   "@executable_path/../Frameworks"
