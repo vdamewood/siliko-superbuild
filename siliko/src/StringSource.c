@@ -1,5 +1,5 @@
 /* StringSource.c: Support for reading from a string
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2024 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -63,30 +63,25 @@ SilikoDataSource *SilikoStringSourceNew(const char *NewInput)
 	SilikoDataSource *source = NULL;
 
 	if (!(state = malloc(sizeof(SilikoStringSourceState))))
-		goto memerr;
+		return NULL;
 
-	// This line protects against freeing the undefined pointer
-	// that string would be set to if it weren't set to NULL.
-	state->string = NULL;
-
-	state->string = strdup(NewInput);
-
+	if (!(state->string = strdup(NewInput)))
+	{
+		free(state);
+		return NULL;
+	}
 	state->current = state->string;
 
-	source = SilikoDataSourceNew(
+	if (!(source = SilikoDataSourceNew(
 		state,
 		SilikoStringSourceAdvance,
 		SilikoStringSourceGet,
-		SilikoStringSourceDelete
-	);
-	if (!source)
-		goto memerr;
-
-	return source;
-memerr:
-	free(source);
-	if (state)
+		SilikoStringSourceDelete)))
+	{
 		free(state->string);
-	free(state);
-	return NULL;
+		free(state);
+		return NULL;
+	}
+	
+	return source;
 }

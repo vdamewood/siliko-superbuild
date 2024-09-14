@@ -1,5 +1,5 @@
 /* SyntaxTree.c: Functions to manipulate abstract syntax trees
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2024 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -101,14 +101,18 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *NewId)
 	SilikoSyntaxTreeBranch *rValBranch = NULL;
 	SilikoSyntaxTreeNode **rValChildren = NULL;
 	char * rValId = NULL;
-	if (!(rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
-		goto memerr;
-	if (!(rValBranch = malloc(sizeof(SilikoSyntaxTreeBranch))))
-		goto memerr;
-	if (!(rValChildren = calloc(DefaultSize, sizeof(SilikoSyntaxTreeNode*))))
-		goto memerr;
-	if (!(rValId = strdup(NewId)))
-		goto memerr;
+	if (!(rVal = malloc(sizeof(SilikoSyntaxTreeNode)))
+		|| !(rValBranch = malloc(sizeof(SilikoSyntaxTreeBranch)))
+		|| !(rValChildren = calloc(DefaultSize,
+								sizeof(SilikoSyntaxTreeNode*)))
+		|| !(rValId = strdup(NewId)))
+	{
+		free(rVal);
+		free(rValBranch);
+		free(rValChildren);
+		free(rValId);
+		return NULL;
+	}
 
 	rVal->Type = SILIKO_AST_BRANCH;
 	rVal->Branch = rValBranch;
@@ -119,12 +123,6 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *NewId)
 	rVal->Branch->Children = rValChildren;
 
 	return rVal;
-memerr:
-	free(rVal);
-	free(rValBranch);
-	free(rValChildren);
-	free(rValId);
-	return NULL;
 }
 
 static int ExpandChildren(SilikoSyntaxTreeNode *Tree)

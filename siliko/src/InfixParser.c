@@ -1,5 +1,5 @@
 /* InfixParser.c: Infix notation parser
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2024 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -85,14 +85,14 @@ static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer)
 	}
 
 	SilikoLexerNext(lexer);
-	if (!(leftValue = GetExprMulDiv(lexer)))
-		goto memerr;
-
-	if (!(rest = GetExprAddSubRest(lexer)))
-		goto memerr;
-
-	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation)))
-		goto memerr;
+	if (!(leftValue = GetExprMulDiv(lexer))
+		|| !(rest = GetExprAddSubRest(lexer))
+		|| !(branchNode = SilikoSyntaxTreeNewBranch(operation)))
+	{
+		SilikoSyntaxTreeDelete(leftValue);
+		SilikoSyntaxTreeDelete(rest);
+		return NULL;
+	}
 
 	SilikoSyntaxTreePushRight(branchNode, NULL);
 	SilikoSyntaxTreePushRight(branchNode, leftValue);
@@ -105,10 +105,6 @@ static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer)
 
 	SilikoSyntaxTreeDelete(rest);
 	return branchNode;
-memerr:
-	SilikoSyntaxTreeDelete(leftValue);
-	SilikoSyntaxTreeDelete(rest);
-	return NULL;
 }
 
 static SilikoSyntaxTreeNode *GetExprMulDiv(SilikoLexer *lexer)
@@ -161,14 +157,14 @@ static SilikoSyntaxTreeNode *GetExprMulDivRest(SilikoLexer *lexer)
 	}
 
 	SilikoLexerNext(lexer);
-	if (!(leftValue = GetExprExp(lexer)))
-		goto memerr;
-
-	if (!(rest = GetExprMulDivRest(lexer)))
-		goto memerr;
-
-	if (!(branchNode = SilikoSyntaxTreeNewBranch(operation)))
-		goto memerr;
+	if (!(leftValue = GetExprExp(lexer))
+		|| !(rest = GetExprMulDivRest(lexer))
+		|| !(branchNode = SilikoSyntaxTreeNewBranch(operation)))
+	{
+		SilikoSyntaxTreeDelete(leftValue);
+		SilikoSyntaxTreeDelete(rest);
+		return NULL;
+	}
 
 	SilikoSyntaxTreePushRight(branchNode, NULL);
 	SilikoSyntaxTreePushRight(branchNode, leftValue);
@@ -181,10 +177,6 @@ static SilikoSyntaxTreeNode *GetExprMulDivRest(SilikoLexer *lexer)
 
 	SilikoSyntaxTreeDelete(rest);
 	return branchNode;
-memerr:
-	SilikoSyntaxTreeDelete(leftValue);
-	SilikoSyntaxTreeDelete(rest);
-	return NULL;
 }
 
 static SilikoSyntaxTreeNode *GetExprExp(SilikoLexer *lexer)
@@ -194,10 +186,13 @@ static SilikoSyntaxTreeNode *GetExprExp(SilikoLexer *lexer)
 	SilikoSyntaxTreeNode * rVal = NULL;
 
 	if (!(leftValue = GetExprRoll(lexer)))
-		goto memerr;
+		return NULL;
 
 	if (!(rest = GetExprExpLeftFactor(lexer)))
-		goto memerr;
+	{
+		SilikoSyntaxTreeDelete(leftValue);
+		return NULL;
+	}
 
 	if (SilikoSyntaxTreeGetType(rest) == SILIKO_AST_NOTHING)
 	{
@@ -206,15 +201,15 @@ static SilikoSyntaxTreeNode *GetExprExp(SilikoLexer *lexer)
 	}
 
 	if (!(rVal = SilikoSyntaxTreeNewBranch("power")))
-		goto memerr;
+	{
+		SilikoSyntaxTreeDelete(leftValue);
+		SilikoSyntaxTreeDelete(rest);
+		return NULL;
+	}
 
 	SilikoSyntaxTreePushRight(rVal, leftValue);
 	SilikoSyntaxTreePushRight(rVal, rest);
 	return rVal;
-memerr:
-	SilikoSyntaxTreeDelete(leftValue);
-	SilikoSyntaxTreeDelete(rest);
-	return NULL;
 }
 
 static SilikoSyntaxTreeNode *GetExprExpLeftFactor(SilikoLexer *lexer)
@@ -248,10 +243,14 @@ static SilikoSyntaxTreeNode *GetExprRoll(SilikoLexer *lexer)
 	SilikoSyntaxTreeNode *rVal;
 
 	if (!(leftValue = GetAtom(lexer)))
-		goto memerr;
+		return NULL;
 
 	if (!(rest = GetExprRollLeftFactor(lexer)))
-		goto memerr;
+	{
+		SilikoSyntaxTreeDelete(leftValue);
+		return NULL;
+	}
+
 
 	if (SilikoSyntaxTreeGetType(rest) == SILIKO_AST_NOTHING)
 	{
@@ -260,15 +259,15 @@ static SilikoSyntaxTreeNode *GetExprRoll(SilikoLexer *lexer)
 	}
 
 	if (!(rVal = SilikoSyntaxTreeNewBranch("dice")))
-		goto memerr;
+	{
+		SilikoSyntaxTreeDelete(leftValue);
+		SilikoSyntaxTreeDelete(rest);
+		return NULL;
+	}
+
 	SilikoSyntaxTreePushRight(rVal, leftValue);
 	SilikoSyntaxTreePushRight(rVal, rest);
 	return rVal;
-memerr:
-	SilikoSyntaxTreeDelete(leftValue);
-	SilikoSyntaxTreeDelete(rest);
-	return NULL;
-
 }
 
 static SilikoSyntaxTreeNode *GetExprRollLeftFactor(SilikoLexer *lexer)
