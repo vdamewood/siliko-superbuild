@@ -15,7 +15,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(Gtk REQUIRED gtk4 IMPORTED_TARGET)
+pkg_check_modules(Gtk REQUIRED gtk4 glib-2.0>=2.74 IMPORTED_TARGET)
 
 find_program(GRESOURCE glib-compile-resources)
 if(NOT GRESOURCE)
