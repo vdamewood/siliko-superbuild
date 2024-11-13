@@ -61,7 +61,7 @@ if(WIN32)
 	set(SILIKO_MSI_GUID  "00000000-0000-0000-0000-000000000000"  CACHE STRING
 		"The Upgrade GUID used for MSI Installers (Ignored if SILIKO_PACKAGE or SILIKO_PACKAGE_MSI is false)"
 	)
-	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Sioliko." Off)
+	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
 	if(SILIKO_OFFICIAL_RELEASE)
 	     set(VSV_PRERELEASE_FLAG 0)
 	else()
