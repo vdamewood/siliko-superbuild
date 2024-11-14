@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2023 Vincent Damewood
+# Copyright 2012-2024 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,27 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+cmake_minimum_required(VERSION 3.18)
+
+include(GNUInstallDirs)
+
+set(SILIKO_BUNDLE_COPYRIGHT "Copyright 2012 - 2024 Vincent Damewood")
+set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
+	"Locaton to install application bundle"
+)
+
+project(SilikujoForMacOS
+	VERSION       0.0.0
+	DESCRIPTION   "GUI frontend for Siliko for macOS"
+	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
+	LANGUAGES     OBJC
+)
+
+
+if(NOT TARGET Siliko::Siliko)
+	find_package(Siliko REQUIRED)
+endif()
 
 find_program(IBTOOL ibtool)
 if (NOT IBTOOL)
@@ -41,7 +62,7 @@ set_target_properties(SilikujoForMacOS PROPERTIES
 	MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
-	MACOSX_BUNDLE_COPYRIGHT             "${SILIKO_COPYRIGHT}"
+	MACOSX_BUNDLE_COPYRIGHT             "${SILIKO_BUNDLE_COPYRIGHT}"
 	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 	RUNTIME_OUTPUT_DIRECTORY            "${PROJECT_BINARY_DIR}/products"

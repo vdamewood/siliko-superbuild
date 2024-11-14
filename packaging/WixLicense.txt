@@ -1,7 +1,0 @@
-Copyright 2012-2021 Vincent Damewood
-
-You may redistribute and/or modify the Siliko library under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-You may redistribute and/or modify the command-line interface and graphical user interface programs under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-The Siliko library and the programs are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License and the GNU Lesser General Public License for more details.

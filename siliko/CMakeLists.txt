@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2023 Vincent Damewood
+# Copyright 2012-2024 Vincent Damewood
 #
 # This library is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
@@ -14,6 +14,23 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
+cmake_minimum_required(VERSION 3.18)
+
+include(GNUInstallDirs)
+
+if(APPLE)
+	option(SILIKO_BUILD_FRAMEWORK   "Build Siliko as a framework." On)
+	set(SILIKO_INSTALL_FRAMEWORKDIR  Frameworks  CACHE STRING
+		"Locaton to install framework (ignored if SILIKO_BUILD_FRAMEWORK is off)"
+	)
+endif()
+if(WIN32)
+	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
+endif()
+set(SILIKO_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/Siliko" CACHE STRING
+		"Locaton to install CMake files (ignored if SILIKO_BUILD_FRAMEWORK is on)"
+)
+
 if(SILIKO_BUILD_FRAMEWORK)
 	set(CMAKEDIR "${SILIKO_INSTALL_FRAMEWORKDIR}/Siliko.framework/Resources")
 	set(RUNTIME_COMPONENT "Siliko")
@@ -24,9 +41,17 @@ else()
 	set(DEVELOPMENT_COMPONENT "Siliko_Development")
 endif()
 
+project(Siliko
+	VERSION       0.0.0
+	DESCRIPTION   "Mathematical expression parser library written in C"
+	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
+	LANGUAGES     C
+)
+
+find_library(LIBM m)
+
 add_library(Siliko)
 add_library(Siliko::Siliko ALIAS Siliko)
-
 set(PUBLIC_HEADERS
 	include/Siliko/Value.h
 	include/Siliko/FunctionCaller.h
@@ -53,12 +78,9 @@ target_sources(Siliko
 		src/Lexer.c
 		src/InfixParser.c
 )
-
-find_library(LIBM m)
 if(LIBM)
 	target_link_libraries(Siliko PRIVATE m)
 endif()
-
 target_include_directories(Siliko
 	PUBLIC
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
@@ -84,6 +106,12 @@ set_target_properties(Siliko PROPERTIES
 	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
 if(WIN32)
+	if(SILIKO_OFFICIAL_RELEASE)
+		set(VSV_PRERELEASE_FLAG 0)
+	else()
+		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
+	endif()
+
 	set(VSV_DEBUG_FLAG 0)
 	set(VSV_FILENAME "Siliko.dll")
 	configure_file(

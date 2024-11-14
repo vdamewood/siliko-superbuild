@@ -4,6 +4,6 @@ Name=Silikujo
 Comment=Math parser and calculator
 Type=Application
 Exec=Silikujo
-Icon=siliko
+Icon=silikujo
 Terminal=false
 Categories=GTK;Utility

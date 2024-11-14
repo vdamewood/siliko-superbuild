@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2022 Vincent Damewood
+# Copyright 2012-2024 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+cmake_minimum_required(VERSION 3.18)
+
+include(GNUInstallDirs)
+
+project(SilikujoForUnix
+	VERSION       0.0.0
+	DESCRIPTION   "GUI frontend for Siliko for Unix"
+	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
+	LANGUAGES     C
+)
+
+if(NOT TARGET Siliko::Siliko)
+	find_package(Siliko REQUIRED)
+endif()
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(Gtk REQUIRED gtk4 glib-2.0>=2.74 IMPORTED_TARGET)
@@ -70,7 +85,7 @@ install(FILES silikujo.desktop
 	COMPONENT    Silikujo
 )
 
-install(FILES siliko.png
+install(FILES silikujo.png
 	DESTINATION  "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps"
 	COMPONENT    Silikujo
 )

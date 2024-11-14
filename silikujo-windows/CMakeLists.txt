@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2023 Vincent Damewood
+# Copyright 2012-2024 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,6 +13,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+cmake_minimum_required(VERSION 3.18)
+
+include(GNUInstallDirs)
+
+if(WIN32)
+	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
+endif()
+
+project(SilikujoForWindows
+	VERSION       0.0.0
+	DESCRIPTION   "GUI frontend for Siliko for Windows"
+	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
+	LANGUAGES     C
+)
+
+
+if(NOT TARGET Siliko::Siliko)
+	find_package(Siliko REQUIRED)
+endif()
 
 add_executable(SilikujoForWindows WIN32)
 target_sources(SilikujoForWindows
@@ -34,6 +54,11 @@ set_target_properties(SilikujoForWindows PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
 	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
+if(SILIKO_OFFICIAL_RELEASE)
+	set(VSV_PRERELEASE_FLAG 0)
+else()
+	set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
+endif()
 set(VSV_DEBUG_FLAG 0)
 set(VSV_FILENAME "Silikujo.exe")
 configure_file(

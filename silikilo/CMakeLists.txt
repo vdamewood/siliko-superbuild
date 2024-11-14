@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2023 Vincent Damewood
+# Copyright 2012-2024 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+cmake_minimum_required(VERSION 3.18)
+
+include(GNUInstallDirs)
+
+project(Silikilo
+	VERSION       0.0.0
+	DESCRIPTION   "Command-line frontend for Siliko"
+	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
+	LANGUAGES     C
+)
+
+if(WIN32)
+	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
+endif()
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+if(NOT TARGET Siliko::Siliko)
+	find_package(Siliko REQUIRED)
+endif()
 find_package(Readline)
 
 add_executable(Silikilo)
@@ -56,6 +75,12 @@ if(APPLE AND SILIKO_BUILD_SHARED_LIBRARY)
 endif()
 
 if(WIN32)
+	if(SILIKO_OFFICIAL_RELEASE)
+		set(VSV_PRERELEASE_FLAG 0)
+	else()
+		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
+	endif()
+
 	set(VSV_DEBUG_FLAG 0)
 	set(VSV_FILENAME "silikilo.exe")
 	configure_file(
@@ -74,7 +99,6 @@ if(WIN32)
   	)
 	target_sources(Silikilo PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
 endif()
-
 
 install(TARGETS Silikilo
 RUNTIME
