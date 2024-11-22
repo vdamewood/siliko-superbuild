@@ -16,12 +16,6 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-include(GNUInstallDirs)
-
-if(WIN32)
-	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
-endif()
-
 project(SilikujoForWindows
 	VERSION       0.0.0
 	DESCRIPTION   "GUI frontend for Siliko for Windows"
@@ -29,6 +23,11 @@ project(SilikujoForWindows
 	LANGUAGES     C
 )
 
+include(GNUInstallDirs)
+
+if(WIN32)
+	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
+endif()
 
 if(NOT TARGET Siliko::Siliko)
 	find_package(Siliko REQUIRED)

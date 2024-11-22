@@ -16,14 +16,14 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-include(GNUInstallDirs)
-
 project(SilikujoForUnix
 	VERSION       0.0.0
 	DESCRIPTION   "GUI frontend for Siliko for Unix"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
+
+include(GNUInstallDirs)
 
 if(NOT TARGET Siliko::Siliko)
 	find_package(Siliko REQUIRED)

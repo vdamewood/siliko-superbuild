@@ -16,14 +16,14 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-include(GNUInstallDirs)
-
 project(Silikilo
 	VERSION       0.0.0
 	DESCRIPTION   "Command-line frontend for Siliko"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
+
+include(GNUInstallDirs)
 
 if(WIN32)
 	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)

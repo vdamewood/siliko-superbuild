@@ -16,13 +16,6 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-include(GNUInstallDirs)
-
-set(SILIKO_BUNDLE_COPYRIGHT "Copyright 2012 - 2024 Vincent Damewood")
-set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
-	"Locaton to install application bundle"
-)
-
 project(SilikujoForMacOS
 	VERSION       0.0.0
 	DESCRIPTION   "GUI frontend for Siliko for macOS"
@@ -30,6 +23,12 @@ project(SilikujoForMacOS
 	LANGUAGES     OBJC
 )
 
+include(GNUInstallDirs)
+
+set(SILIKO_BUNDLE_COPYRIGHT "Copyright 2012 - 2024 Vincent Damewood")
+set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
+	"Locaton to install application bundle"
+)
 
 if(NOT TARGET Siliko::Siliko)
 	find_package(Siliko REQUIRED)
@@ -80,49 +79,7 @@ target_link_libraries(SilikujoForMacOS
 		Siliko::Siliko
 		"-framework Cocoa"
 )
-
-get_target_property(SILIKO_TYPE Siliko::Siliko TYPE)
-if (${SILIKO_TYPE} STREQUAL SHARED_LIBRARY)
-	set_target_properties(SilikujoForMacOS PROPERTIES
-		BUILD_WITH_INSTALL_RPATH        On
-		INSTALL_RPATH                   "@executable_path/../Frameworks"
-	)
-
-	if(SILIKO_BUILD_FRAMEWORK)
-		add_custom_command(TARGET SilikujoForMacOS POST_BUILD
-			COMMAND "cmake" "-E" "make_directory"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_FILE_NAME:Siliko>.framework/Versions/${PROJECT_VERSION}/Resources"
-			COMMAND "cmake" "-E" "copy"
-				"$<TARGET_FILE_DIR:Siliko>/Resources/Info.plist"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_FILE_NAME:Siliko>.framework/Versions/${PROJECT_VERSION}/Resources/"
-			COMMAND "cmake" "-E" "copy"
-				"$<TARGET_FILE:Siliko>"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_FILE_NAME:Siliko>.framework/Versions/${PROJECT_VERSION}/"
-			COMMAND "cmake" "-E" "create_symlink"
-				"${PROJECT_VERSION}"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_FILE_NAME:Siliko>.framework/Versions/Current"
-			COMMAND "cmake" "-E" "create_symlink"
-				"Versions/Current/Resources"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_FILE_NAME:Siliko>.framework/Resources"
-			COMMAND "cmake" "-E" "create_symlink"
-				"Versions/Current/$<TARGET_FILE_NAME:Siliko>"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_FILE_NAME:Siliko>.framework/$<TARGET_FILE_NAME:Siliko>"
-			COMMENT "Installing framework into application bundle"
-		)
-	else()
-		add_custom_command(TARGET SilikujoForMacOS POST_BUILD
-			COMMAND "cmake" "-E" "make_directory"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks"
-			COMMAND "cmake" "-E" "copy"
-				"$<TARGET_FILE:Siliko>"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/"
-			COMMAND "cmake" "-E" "create_symlink"
-				"$<TARGET_FILE_NAME:Siliko>"
-				"$<TARGET_BUNDLE_CONTENT_DIR:SilikujoForMacOS>/Frameworks/$<TARGET_SONAME_FILE_NAME:Siliko>"
-			COMMENT "Installing dylib into application bundle"
-		)
-	endif()
-endif()
+siliko_fixup_bundle(SilikujoForMacOS)
 
 install(TARGETS SilikujoForMacOS
 BUNDLE
