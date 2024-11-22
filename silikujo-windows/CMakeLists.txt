@@ -48,10 +48,6 @@ target_sources(SilikujoForWindows
 )
 set_target_properties(SilikujoForWindows PROPERTIES
 	OUTPUT_NAME               Silikujo
-	RUNTIME_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
-	LIBRARY_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
-	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
-	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
 if(SILIKO_OFFICIAL_RELEASE)
 	set(VSV_PRERELEASE_FLAG 0)

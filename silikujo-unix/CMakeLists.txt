@@ -66,10 +66,6 @@ target_sources(SilikujoForUnix
 )
 set_target_properties(SilikujoForUnix PROPERTIES
 	OUTPUT_NAME               Silikujo
-	RUNTIME_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
-	LIBRARY_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
-	ARCHIVE_OUTPUT_DIRECTORY  "${PROJECT_BINARY_DIR}/products"
-	PDB_OUTPUT_DIRECTORY      "${PROJECT_BINARY_DIR}/products"
 )
 target_compile_features(SilikujoForUnix PRIVATE c_std_11)
 target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk)
