@@ -22,12 +22,9 @@ project(Silikilo
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
+set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
-
-if(WIN32)
-	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
-endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 if(NOT TARGET Siliko::SilikoCore)
@@ -71,7 +68,7 @@ if(APPLE AND SILIKO_BUILD_SHARED_LIBRARY)
 endif()
 
 if(WIN32)
-	if(SILIKO_OFFICIAL_RELEASE)
+	if(PRERELEASE_SUFFIX STREQUAL "")
 		set(VSV_PRERELEASE_FLAG 0)
 	else()
 		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)

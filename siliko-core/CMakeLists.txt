@@ -22,6 +22,7 @@ project(SilikoCore
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
+set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
 
@@ -30,9 +31,6 @@ if(APPLE)
 	set(SILIKO_CORE_INSTALL_FRAMEWORKDIR  Frameworks  CACHE STRING
 		"Locaton to install framework (ignored if SILIKO_CORE_BUILD_FRAMEWORK is off)"
 	)
-endif()
-if(WIN32)
-	option(SILIKO_CORE_OFFICIAL_RELEASE  "Build an official release of Silik Core." Off)
 endif()
 set(SILIKO_CORE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/SilikoCore" CACHE STRING
 		"Locaton to install CMake files (ignored if SILIKO_CORE_BUILD_FRAMEWORK is on)"
@@ -103,7 +101,7 @@ set_target_properties(SilikoCore PROPERTIES
 	SOVERSION                 ${PROJECT_VERSION_MAJOR}
 )
 if(WIN32)
-	if(SILIKO_CORE_OFFICIAL_RELEASE)
+	if(PRERELEASE_SUFFIX STREQUAL "")
 		set(VSV_PRERELEASE_FLAG 0)
 	else()
 		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)

@@ -22,6 +22,7 @@ project(SilikujoForMacOS
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     OBJC
 )
+set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
 

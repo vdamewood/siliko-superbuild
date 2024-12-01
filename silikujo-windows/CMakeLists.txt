@@ -22,12 +22,9 @@ project(SilikujoForWindows
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
+set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
-
-if(WIN32)
-	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
-endif()
 
 if(NOT TARGET Siliko::SilikoCore)
 	find_package(SilikoCore REQUIRED)
@@ -49,7 +46,7 @@ target_sources(SilikujoForWindows
 set_target_properties(SilikujoForWindows PROPERTIES
 	OUTPUT_NAME               Silikujo
 )
-if(SILIKO_OFFICIAL_RELEASE)
+if(PRERELEASE_SUFFIX STREQUAL "")
 	set(VSV_PRERELEASE_FLAG 0)
 else()
 	set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)

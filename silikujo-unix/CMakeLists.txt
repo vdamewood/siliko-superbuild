@@ -22,6 +22,7 @@ project(SilikujoForUnix
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
+set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
 
