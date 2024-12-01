@@ -30,8 +30,8 @@ if(WIN32)
 endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-if(NOT TARGET Siliko::Siliko)
-	find_package(Siliko REQUIRED)
+if(NOT TARGET Siliko::SilikoCore)
+	find_package(SilikoCore REQUIRED)
 endif()
 find_package(Readline)
 
@@ -44,7 +44,7 @@ set_target_properties(Silikilo PROPERTIES
 	OUTPUT_NAME               silikilo
 )
 target_compile_features(Silikilo PRIVATE c_std_11)
-target_link_libraries(Silikilo PRIVATE Siliko::Siliko)
+target_link_libraries(Silikilo PRIVATE Siliko::SilikoCore)
 
 if (UNIX)
 	target_compile_definitions(Silikilo PRIVATE USE_UNIX=1)

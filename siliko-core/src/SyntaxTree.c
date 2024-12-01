@@ -18,8 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <Siliko/SyntaxTree.h>
-#include <Siliko/FunctionCaller.h>
+#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/FunctionCaller.h>
 
 #if defined _WIN32
 #define strdup _strdup

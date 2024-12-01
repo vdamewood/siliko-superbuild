@@ -21,8 +21,8 @@
 #include <string.h>
 #include <time.h>
 
-#include <Siliko/FunctionCaller.h>
-#include <Siliko/Value.h>
+#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Value.h>
 
 #include "Functions.h"
 #include "Hash.h"

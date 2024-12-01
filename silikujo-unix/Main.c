@@ -17,7 +17,7 @@
 
 #include <gtk/gtk.h>
 
-#include <Siliko/FunctionCaller.h>
+#include <SilikoCore/FunctionCaller.h>
 
 #include "EvalWindow.h"
 

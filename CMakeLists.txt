@@ -19,9 +19,9 @@ cmake_minimum_required(VERSION 3.18)
 option(SILIKO_BUILD_CLI  "Build Silikilo, a command-line interface for Siliko" On)
 option(SILIKO_BUILD_GUI  "Build Silikujo, a GUI interface for Siliko" On)
 
-project(SilikoSuperBuild)
+project(Siliko)
 
-add_subdirectory(siliko)
+add_subdirectory(siliko-core)
 
 if(SILIKO_BUILD_CLI)
 	add_subdirectory(silikilo)

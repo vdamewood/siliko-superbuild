@@ -17,7 +17,7 @@
 
 #include <stdlib.h>
 
-#include <Siliko/DataSource.h>
+#include <SilikoCore/DataSource.h>
 
 SilikoDataSource *SilikoDataSourceNew(
 	void *NewState,

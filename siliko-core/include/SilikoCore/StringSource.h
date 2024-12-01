@@ -1,4 +1,4 @@
-/* InfixParser.h: Infix notation parser
+/* StringSource.h: Support for reading from a string
  * Copyright 2012-2021 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -15,21 +15,19 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_INFIX_PARSER_H
-#define SILIKO_INFIX_PARSER_H
+#if !defined SILIKO_STRING_SOURCE
+#define SILIKO_STRING_SOURCE
 
-#include <Siliko/Api.h>
-#include <Siliko/DataSource.h>
-#include <Siliko/SyntaxTree.h>
+#include <SilikoCore/DataSource.h>
 
 #if defined __cplusplus
 extern "C" {
 #endif
 
-SILIKO_EXPORT SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *input);
+SILIKOCORE_EXPORT SilikoDataSource *SilikoStringSourceNew(const char *InputString);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_INFIX_PARSER_H */
+#endif /* SILIKO_STRING_SOURCE */

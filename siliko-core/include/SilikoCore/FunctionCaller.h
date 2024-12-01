@@ -18,8 +18,8 @@
 #if !defined SILIKO_FUNCTION_CALLER_H
 #define SILIKO_FUNCTION_CALLER_H
 
-#include <Siliko/Api.h>
-#include <Siliko/Value.h>
+#include <SilikoCore/Api.h>
+#include <SilikoCore/Value.h>
 
 #if defined __cplusplus
 extern "C" {
@@ -27,10 +27,10 @@ extern "C" {
 
 typedef SilikoValue (*SilikoFunctionPointer)(int, SilikoValue *);
 
-SILIKO_EXPORT int SilikoFunctionCallerSetUp(void);
-SILIKO_EXPORT void SilikoFunctionCallerTearDown(void);
-SILIKO_EXPORT SilikoValue SilikoFunctionCallerCall(const char *FunctionName, int ArgumentCount, SilikoValue *Arguments);
-SILIKO_EXPORT int SilikoFunctionCallerInstall(const char *FunctionName, SilikoFunctionPointer Function);
+SILIKOCORE_EXPORT int SilikoFunctionCallerSetUp(void);
+SILIKOCORE_EXPORT void SilikoFunctionCallerTearDown(void);
+SILIKOCORE_EXPORT SilikoValue SilikoFunctionCallerCall(const char *FunctionName, int ArgumentCount, SilikoValue *Arguments);
+SILIKOCORE_EXPORT int SilikoFunctionCallerInstall(const char *FunctionName, SilikoFunctionPointer Function);
 
 #if defined __cplusplus
 }

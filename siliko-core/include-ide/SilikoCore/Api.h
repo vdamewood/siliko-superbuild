@@ -5,9 +5,9 @@
 // so that this file resolves as Siliko/Api.h to eliminate errors from
 // missing the header file Siliko/Api.h.
 
-#define SILIKO_EXPORT
-#define SILIKO_NO_EXPORT
-#define SILIKO_DEPRECATED
-#define SILIKO_DEPRECATED_EXPORT
-#define SILIKO_DEPRECATED_NO_EXPORT
-#define SILIKO_NO_DEPRECATED
+#define SILIKOCORE_EXPORT
+#define SILIKOCORE_NO_EXPORT
+#define SILIKOCORE_DEPRECATED
+#define SILIKOCORE_DEPRECATED_EXPORT
+#define SILIKOCORE_DEPRECATED_NO_EXPORT
+#define SILIKOCORE_NO_DEPRECATED

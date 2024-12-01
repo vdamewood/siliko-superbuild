@@ -29,8 +29,8 @@ if(WIN32)
 	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
 endif()
 
-if(NOT TARGET Siliko::Siliko)
-	find_package(Siliko REQUIRED)
+if(NOT TARGET Siliko::SilikoCore)
+	find_package(SilikoCore REQUIRED)
 endif()
 
 add_executable(SilikujoForWindows WIN32)
@@ -72,7 +72,7 @@ configure_file(
 )
 target_sources(SilikujoForWindows PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc>)
 target_compile_features(SilikujoForWindows PRIVATE c_std_11)
-target_link_libraries(SilikujoForWindows PRIVATE Siliko::Siliko)
+target_link_libraries(SilikujoForWindows PRIVATE Siliko::SilikoCore)
 
 install(TARGETS SilikujoForWindows
 RUNTIME

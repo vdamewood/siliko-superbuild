@@ -16,7 +16,7 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-project(Siliko
+project(SilikoCore
 	VERSION       0.0.0
 	DESCRIPTION   "Mathematical expression parser library written in C"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
@@ -26,45 +26,45 @@ project(Siliko
 include(GNUInstallDirs)
 
 if(APPLE)
-	option(SILIKO_BUILD_FRAMEWORK   "Build Siliko as a framework." On)
-	set(SILIKO_INSTALL_FRAMEWORKDIR  Frameworks  CACHE STRING
-		"Locaton to install framework (ignored if SILIKO_BUILD_FRAMEWORK is off)"
+	option(SILIKO_CORE_BUILD_FRAMEWORK   "Build Siliko Core as a framework." On)
+	set(SILIKO_CORE_INSTALL_FRAMEWORKDIR  Frameworks  CACHE STRING
+		"Locaton to install framework (ignored if SILIKO_CORE_BUILD_FRAMEWORK is off)"
 	)
 endif()
 if(WIN32)
-	option(SILIKO_OFFICIAL_RELEASE  "Build an official release of Siliko." Off)
+	option(SILIKO_CORE_OFFICIAL_RELEASE  "Build an official release of Silik Core." Off)
 endif()
-set(SILIKO_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/Siliko" CACHE STRING
-		"Locaton to install CMake files (ignored if SILIKO_BUILD_FRAMEWORK is on)"
+set(SILIKO_CORE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/SilikoCore" CACHE STRING
+		"Locaton to install CMake files (ignored if SILIKO_CORE_BUILD_FRAMEWORK is on)"
 )
 
-if(SILIKO_BUILD_FRAMEWORK)
-	set(CMAKEDIR "${SILIKO_INSTALL_FRAMEWORKDIR}/Siliko.framework/Resources")
-	set(RUNTIME_COMPONENT "Siliko")
-	set(DEVELOPMENT_COMPONENT "Siliko")
+if(SILIKO_CORE_BUILD_FRAMEWORK)
+	set(CMAKEDIR "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources")
+	set(RUNTIME_COMPONENT "SilikoCore")
+	set(DEVELOPMENT_COMPONENT "SilikoCore")
 else()
-	set(CMAKEDIR "${SILIKO_INSTALL_CMAKEDIR}")
-	set(RUNTIME_COMPONENT "Siliko_Runtime")
-	set(DEVELOPMENT_COMPONENT "Siliko_Development")
+	set(CMAKEDIR "${SILIKO_CORE_INSTALL_CMAKEDIR}")
+	set(RUNTIME_COMPONENT "SilikoCore_Runtime")
+	set(DEVELOPMENT_COMPONENT "SilikoCore_Development")
 endif()
 
 
 find_library(LIBM m)
 
-add_library(Siliko)
-add_library(Siliko::Siliko ALIAS Siliko)
+add_library(SilikoCore)
+add_library(Siliko::SilikoCore ALIAS SilikoCore)
 set(PUBLIC_HEADERS
-	include/Siliko/Value.h
-	include/Siliko/FunctionCaller.h
-	include/Siliko/SyntaxTree.h
-	include/Siliko/DataSource.h
-	include/Siliko/StringSource.h
-	include/Siliko/Token.h
-	include/Siliko/Lexer.h
-	include/Siliko/InfixParser.h
-	${CMAKE_CURRENT_BINARY_DIR}/include/Siliko/Api.h
+	include/SilikoCore/Value.h
+	include/SilikoCore/FunctionCaller.h
+	include/SilikoCore/SyntaxTree.h
+	include/SilikoCore/DataSource.h
+	include/SilikoCore/StringSource.h
+	include/SilikoCore/Token.h
+	include/SilikoCore/Lexer.h
+	include/SilikoCore/InfixParser.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 )
-target_sources(Siliko
+target_sources(SilikoCore
 	PRIVATE
 		${PUBLIC_HEADERS}
 		src/Functions.h
@@ -80,68 +80,68 @@ target_sources(Siliko
 		src/InfixParser.c
 )
 if(LIBM)
-	target_link_libraries(Siliko PRIVATE m)
+	target_link_libraries(SilikoCore PRIVATE m)
 endif()
-target_include_directories(Siliko
+target_include_directories(SilikoCore
 	PUBLIC
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
 		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
 )
-if (NOT SILIKO_BUILD_FRAMEWORK)
-	target_include_directories(Siliko
+if (NOT SILIKO_CORE_BUILD_FRAMEWORK)
+	target_include_directories(SilikoCore
 	INTERFACE
 		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 endif()
-target_compile_features(Siliko PRIVATE c_std_11)
-set_target_properties(Siliko PROPERTIES
+target_compile_features(SilikoCore PRIVATE c_std_11)
+set_target_properties(SilikoCore PROPERTIES
 	PUBLIC_HEADER             "${PUBLIC_HEADERS}"
 	C_VISIBILITY_PRESET       hidden
 	VISIBILITY_INLINES_HIDDEN On
-	FRAMEWORK                 "${SILIKO_BUILD_FRAMEWORK}"
+	FRAMEWORK                 "${SILIKO_CORE_BUILD_FRAMEWORK}"
 	FRAMEWORK_VERSION         ${PROJECT_VERSION}
 	VERSION                   ${PROJECT_VERSION}
 	SOVERSION                 ${PROJECT_VERSION_MAJOR}
 )
 if(WIN32)
-	if(SILIKO_OFFICIAL_RELEASE)
+	if(SILIKO_CORE_OFFICIAL_RELEASE)
 		set(VSV_PRERELEASE_FLAG 0)
 	else()
 		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
 	endif()
 
 	set(VSV_DEBUG_FLAG 0)
-	set(VSV_FILENAME "Siliko.dll")
+	set(VSV_FILENAME "SilikoCore.dll")
 	configure_file(
 		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version-release.rc
 		@ONLY
   	)
-	target_sources(Siliko PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
+	target_sources(SilikoCore PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
 
 	set(VSV_DEBUG_FLAG VS_FF_DEBUG)
-	set(VSV_FILENAME "Siliko.dll")
+	set(VSV_FILENAME "SilikoCore.dll")
 	configure_file(
 		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc
 		@ONLY
   	)
-	target_sources(Siliko PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
+	target_sources(SilikoCore PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
 endif()
 
 include(GenerateExportHeader)
-generate_export_header(Siliko
-	EXPORT_FILE_NAME include/Siliko/Api.h
+generate_export_header(SilikoCore
+	EXPORT_FILE_NAME include/SilikoCore/Api.h
 )
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-	SilikoConfigVersion.cmake
+	SilikoCoreConfigVersion.cmake
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY SameMajorVersion
 )
 
-install(TARGETS Siliko
-	EXPORT Siliko
+install(TARGETS SilikoCore
+	EXPORT SilikoCore
 RUNTIME
 	DESTINATION           "${CMAKE_INSTALL_BINDIR}"
 	COMPONENT             "${RUNTIME_COMPONENT}"
@@ -153,46 +153,46 @@ LIBRARY
 	COMPONENT             "${RUNTIME_COMPONENT}"
 	NAMELINK_COMPONENT    "${DEVELOPMENT_COMPONENT}"
 FRAMEWORK
-	DESTINATION           "${SILIKO_INSTALL_FRAMEWORKDIR}"
+	DESTINATION           "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 PUBLIC_HEADER
-	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}/Siliko"
+	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}/SilikoCore"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
-install(EXPORT Siliko
+install(EXPORT SilikoCore
 	NAMESPACE             Siliko::
-	FILE                  SilikoTarget.cmake
+	FILE                  SilikoCoreTarget.cmake
 	DESTINATION           "${CMAKEDIR}"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SilikoConfigVersion.cmake"
-		"SilikoConfig.cmake"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SilikoCoreConfigVersion.cmake"
+		"SilikoCoreConfig.cmake"
 	DESTINATION           "${CMAKEDIR}"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
 install(FILES
 		"${PROJECT_SOURCE_DIR}/Readme.md"
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/Siliko"
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore"
 	COMPONENT "${RUNTIME_COMPONENT}"
 )
 
 install(FILES
 		"${PROJECT_SOURCE_DIR}/License.txt"
 		"${PROJECT_SOURCE_DIR}/License.Gpl.txt"
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/Siliko"
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore"
 	COMPONENT "${RUNTIME_COMPONENT}"
 )
 
-function(siliko_fixup_bundle TGT)
+function(siliko_core_fixup_bundle TGT)
 	if(APPLE AND TARGET ${TGT})
 		get_target_property(TGT_IS_BUNDLE ${TGT} MACOSX_BUNDLE)
 	else()
 		set(TGT_IS_BUNDLE No)
 	endif()
-	get_target_property(SILIKO_TYPE Siliko::Siliko TYPE)
-	get_target_property(SILIKO_IS_FRAMEWORK Siliko::Siliko FRAMEWORK)
+	get_target_property(SILIKO_CORE_TYPE Siliko::SilikoCore TYPE)
+	get_target_property(SILIKO_CORE_IS_FRAMEWORK Siliko::SilikoCore FRAMEWORK)
 
-	if (${SILIKO_TYPE} STREQUAL SHARED_LIBRARY AND TGT_IS_BUNDLE)
+	if (${SILIKO_CORE_TYPE} STREQUAL SHARED_LIBRARY AND TGT_IS_BUNDLE)
 		get_target_property(TGT_RPATH ${TGT} INSTALL_RPATH)
 		if(NOT "@executable_path/../Frameworks" IN_LIST TGT_RPATH)
 			list(APPEND TGT_RPATH "@executable_path/../Frameworks")
@@ -202,38 +202,38 @@ function(siliko_fixup_bundle TGT)
 		set_target_properties(${TGT} PROPERTIES
 			BUILD_WITH_INSTALL_RPATH On)
 
-		if(SILIKO_IS_FRAMEWORK)
+		if(SILIKO_CORE_IS_FRAMEWORK)
 			add_custom_command(TARGET ${TGT} POST_BUILD
 				COMMAND "cmake" "-E" "make_directory"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::Siliko>.framework/Versions/$<TARGET_PROPERTY:Siliko::Siliko,FRAMEWORK_VERSION>/Resources"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::SilikoCore>.framework/Versions/$<TARGET_PROPERTY:Siliko::SilikoCore,FRAMEWORK_VERSION>/Resources"
 				COMMAND "cmake" "-E" "copy"
-					"$<TARGET_FILE_DIR:Siliko::Siliko>/Resources/Info.plist"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::Siliko>.framework/Versions/$<TARGET_PROPERTY:Siliko::Siliko,FRAMEWORK_VERSION>/Resources/"
+					"$<TARGET_FILE_DIR:Siliko::SilikoCore>/Resources/Info.plist"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::SilikoCore>.framework/Versions/$<TARGET_PROPERTY:Siliko::SilikoCore,FRAMEWORK_VERSION>/Resources/"
 				COMMAND "cmake" "-E" "copy"
-					"$<TARGET_FILE:Siliko::Siliko>"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::Siliko>.framework/Versions/$<TARGET_PROPERTY:Siliko::Siliko,FRAMEWORK_VERSION>/"
+					"$<TARGET_FILE:Siliko::SilikoCore>"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::SilikoCore>.framework/Versions/$<TARGET_PROPERTY:Siliko::SilikoCore,FRAMEWORK_VERSION>/"
 				COMMAND "cmake" "-E" "create_symlink"
-					"$<TARGET_PROPERTY:Siliko::Siliko,FRAMEWORK_VERSION>"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::Siliko>.framework/Versions/Current"
+					"$<TARGET_PROPERTY:Siliko::SilikoCore,FRAMEWORK_VERSION>"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::SilikoCore>.framework/Versions/Current"
 				COMMAND "cmake" "-E" "create_symlink"
 					"Versions/Current/Resources"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::Siliko>.framework/Resources"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::SilikoCore>.framework/Resources"
 				COMMAND "cmake" "-E" "create_symlink"
-					"Versions/Current/$<TARGET_FILE_NAME:Siliko::Siliko>"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::Siliko>.framework/$<TARGET_FILE_NAME:Siliko::Siliko>"
-				COMMENT "Installing Siliko framework into ${TGT} bundle"
+					"Versions/Current/$<TARGET_FILE_NAME:Siliko::SilikoCore>"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_FILE_NAME:Siliko::SilikoCore>.framework/$<TARGET_FILE_NAME:Siliko::SilikoCore>"
+				COMMENT "Installing Siliko Core framework into ${TGT} bundle"
 			)
 		else()
 			add_custom_command(TARGET ${TGT} POST_BUILD
 				COMMAND "cmake" "-E" "make_directory"
 					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks"
 				COMMAND "cmake" "-E" "copy"
-					"$<TARGET_FILE:Siliko::Siliko>"
+					"$<TARGET_FILE:Siliko::SilikoCore>"
 					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/"
 				COMMAND "cmake" "-E" "create_symlink"
-					"$<TARGET_FILE_NAME:Siliko::Siliko>"
-					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_SONAME_FILE_NAME:Siliko::Siliko>"
-				COMMENT "Installing Siliko dylib into ${TGT} bundle"
+					"$<TARGET_FILE_NAME:Siliko::SilikoCore>"
+					"$<TARGET_BUNDLE_CONTENT_DIR:${TGT}>/Frameworks/$<TARGET_SONAME_FILE_NAME:Siliko::SilikoCore>"
+				COMMENT "Installing Siliko Core dylib into ${TGT} bundle"
 			)
 		endif()
 	endif()

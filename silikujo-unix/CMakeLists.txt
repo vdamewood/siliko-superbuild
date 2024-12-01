@@ -25,8 +25,8 @@ project(SilikujoForUnix
 
 include(GNUInstallDirs)
 
-if(NOT TARGET Siliko::Siliko)
-	find_package(Siliko REQUIRED)
+if(NOT TARGET Siliko::SilikoCore)
+	find_package(SilikoCore REQUIRED)
 endif()
 
 find_package(PkgConfig REQUIRED)
@@ -68,7 +68,7 @@ set_target_properties(SilikujoForUnix PROPERTIES
 	OUTPUT_NAME               Silikujo
 )
 target_compile_features(SilikujoForUnix PRIVATE c_std_11)
-target_link_libraries(SilikujoForUnix PRIVATE Siliko::Siliko PkgConfig::Gtk)
+target_link_libraries(SilikujoForUnix PRIVATE Siliko::SilikoCore PkgConfig::Gtk)
 
 install(TARGETS SilikujoForUnix
 RUNTIME

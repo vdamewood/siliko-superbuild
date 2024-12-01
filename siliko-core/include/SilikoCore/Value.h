@@ -18,7 +18,7 @@
 #if !defined SILIKO_VALUE_H
 #define SILIKO_VALUE_H
 
-#include <Siliko/Api.h>
+#include <SilikoCore/Api.h>
 
 #if defined __cplusplus
 extern "C" {
@@ -57,8 +57,8 @@ struct SilikoValue
 };
 typedef struct SilikoValue SilikoValue;
 
-SILIKO_EXPORT char *SilikoValueToString(SilikoValue InputValue);
-SILIKO_EXPORT void SilikoValueDeleteString(char *string);
+SILIKOCORE_EXPORT char *SilikoValueToString(SilikoValue InputValue);
+SILIKOCORE_EXPORT void SilikoValueDeleteString(char *string);
 
 #if defined __cplusplus
 }

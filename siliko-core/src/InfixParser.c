@@ -17,9 +17,9 @@
 
 #include <stdlib.h>
 
-#include <Siliko/InfixParser.h>
-#include <Siliko/SyntaxTree.h>
-#include <Siliko/Lexer.h>
+#include <SilikoCore/InfixParser.h>
+#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/Lexer.h>
 
 static SilikoSyntaxTreeNode *GetExprAddSub(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetExprAddSubRest(SilikoLexer *lexer);

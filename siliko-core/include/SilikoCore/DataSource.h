@@ -1,4 +1,4 @@
-/* StringSource.h: Support for reading from a string
+/* DataSource.h: Abstract interface for input data
  * Copyright 2012-2021 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -15,19 +15,36 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_STRING_SOURCE
-#define SILIKO_STRING_SOURCE
+#if !defined SILIKO_DATA_SOURCE
+#define SILIKO_DATA_SOURCE
 
-#include <Siliko/DataSource.h>
+#include <SilikoCore/Api.h>
 
 #if defined __cplusplus
 extern "C" {
 #endif
 
-SILIKO_EXPORT SilikoDataSource *SilikoStringSourceNew(const char *InputString);
+struct SilikoDataSource
+{
+	void *State;
+	int (*AdvanceFunction)(void *State);
+	char (*GetFunction)(void *State);
+	void (*DeleteFunction)(void *State);
+};
+typedef struct SilikoDataSource SilikoDataSource;
+
+SILIKOCORE_EXPORT SilikoDataSource *SilikoDataSourceNew(
+	void *NewState,
+	int (*NewAdvanceFunction)(void *),
+	char (*NewGetFunction)(void *),
+	void (*NewDeleteFunction)(void *)
+);
+SILIKOCORE_EXPORT int SilikoDataSourceAdvance(SilikoDataSource *Source);
+SILIKOCORE_EXPORT char SilikoDataSourceGet(SilikoDataSource *Source);
+SILIKOCORE_EXPORT void SilikoDataSourceDelete(SilikoDataSource *Source);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_STRING_SOURCE */
+#endif /* SILIKO_DATA_SOURCE */

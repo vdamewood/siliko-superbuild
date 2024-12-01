@@ -30,8 +30,8 @@ set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
 	"Locaton to install application bundle"
 )
 
-if(NOT TARGET Siliko::Siliko)
-	find_package(Siliko REQUIRED)
+if(NOT TARGET Siliko::SilikoCore)
+	find_package(SilikoCore REQUIRED)
 endif()
 
 find_program(IBTOOL ibtool)
@@ -72,10 +72,10 @@ target_compile_options(SilikujoForMacOS
 target_compile_features(SilikujoForMacOS PRIVATE c_std_11)
 target_link_libraries(SilikujoForMacOS
 	PRIVATE
-		Siliko::Siliko
+		Siliko::SilikoCore
 		"-framework Cocoa"
 )
-siliko_fixup_bundle(SilikujoForMacOS)
+siliko_core_fixup_bundle(SilikujoForMacOS)
 
 install(TARGETS SilikujoForMacOS
 BUNDLE

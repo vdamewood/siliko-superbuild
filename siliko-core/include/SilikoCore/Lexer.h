@@ -18,9 +18,9 @@
 #if !defined SILIKO_LEXER_H
 #define SILIKO_LEXER_H
 
-#include <Siliko/Api.h>
-#include <Siliko/DataSource.h>
-#include <Siliko/Token.h>
+#include <SilikoCore/Api.h>
+#include <SilikoCore/DataSource.h>
+#include <SilikoCore/Token.h>
 
 #if defined __cplusplus
 extern "C" {
@@ -29,12 +29,12 @@ extern "C" {
 struct SilikoLexer;
 typedef struct SilikoLexer SilikoLexer;
 
-SILIKO_EXPORT SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
-SILIKO_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT SilikoLexer *SilikoLexerNew(SilikoDataSource *InputSource);
+SILIKOCORE_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
 
-SILIKO_EXPORT void SilikoLexerNext(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT void SilikoLexerNext(SilikoLexer *Lexer);
 
-SILIKO_EXPORT SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer);
 
 #if defined __cplusplus
 }

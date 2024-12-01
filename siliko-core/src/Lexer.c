@@ -19,8 +19,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <Siliko/DataSource.h>
-#include <Siliko/Lexer.h>
+#include <SilikoCore/DataSource.h>
+#include <SilikoCore/Lexer.h>
 
 struct SilikoLexer
 {

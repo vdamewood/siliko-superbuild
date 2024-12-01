@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Siliko/StringSource.h>
-#include <Siliko/InfixParser.h>
-#include <Siliko/SyntaxTree.h>
-#include <Siliko/FunctionCaller.h>
+#include <SilikoCore/StringSource.h>
+#include <SilikoCore/InfixParser.h>
+#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/FunctionCaller.h>
 
 #import "Delegate.h"
 

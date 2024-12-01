@@ -1,4 +1,4 @@
-/* Token.h: Token used by lexical analyzer
+/* InfixParser.h: Infix notation parser
  * Copyright 2012-2021 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -15,49 +15,21 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_TOKEN_H
-#define SILIKO_TOKEN_H
+#if !defined SILIKO_INFIX_PARSER_H
+#define SILIKO_INFIX_PARSER_H
 
-#include <Siliko/Api.h>
+#include <SilikoCore/Api.h>
+#include <SilikoCore/DataSource.h>
+#include <SilikoCore/SyntaxTree.h>
 
 #if defined __cplusplus
 extern "C" {
 #endif
 
-enum SilikoTokenType
-{
-	SILIKO_TOK_ERROR = -1,
-	SILIKO_TOK_UNSET = 0,
-	SILIKO_TOK_LPAREN = '(',
-	SILIKO_TOK_RPAREN = ')',
-	SILIKO_TOK_MULTIPLY = '*',
-	SILIKO_TOK_ADDITION = '+',
-	SILIKO_TOK_COMMA = ',',
-	SILIKO_TOK_SUBTRACT = '-',
-	SILIKO_TOK_DIVISION = '/',
-	SILIKO_TOK_EXPONENT = '^',
-	SILIKO_TOK_DICE = 'd',
-	SILIKO_TOK_INTEGER = 256,
-	SILIKO_TOK_FLOAT,
-	SILIKO_TOK_ID,
-	SILIKO_TOK_EOL
-};
-typedef enum SilikoTokenType SilikoTokenType;
-
-struct SilikoToken
-{
-	SilikoTokenType Type;
-	union
-	{
-		char *Id;
-		long long int Integer;
-		double Float;
-	};
-};
-typedef struct SilikoToken SilikoToken;
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *input);
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_TOKEN_H */
+#endif /* SILIKO_INFIX_PARSER_H */

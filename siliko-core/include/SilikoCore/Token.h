@@ -1,4 +1,4 @@
-/* DataSource.h: Abstract interface for input data
+/* Token.h: Token used by lexical analyzer
  * Copyright 2012-2021 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -15,36 +15,49 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined SILIKO_DATA_SOURCE
-#define SILIKO_DATA_SOURCE
+#if !defined SILIKO_TOKEN_H
+#define SILIKO_TOKEN_H
 
-#include <Siliko/Api.h>
+#include <SilikoCore/Api.h>
 
 #if defined __cplusplus
 extern "C" {
 #endif
 
-struct SilikoDataSource
+enum SilikoTokenType
 {
-	void *State;
-	int (*AdvanceFunction)(void *State);
-	char (*GetFunction)(void *State);
-	void (*DeleteFunction)(void *State);
+	SILIKO_TOK_ERROR = -1,
+	SILIKO_TOK_UNSET = 0,
+	SILIKO_TOK_LPAREN = '(',
+	SILIKO_TOK_RPAREN = ')',
+	SILIKO_TOK_MULTIPLY = '*',
+	SILIKO_TOK_ADDITION = '+',
+	SILIKO_TOK_COMMA = ',',
+	SILIKO_TOK_SUBTRACT = '-',
+	SILIKO_TOK_DIVISION = '/',
+	SILIKO_TOK_EXPONENT = '^',
+	SILIKO_TOK_DICE = 'd',
+	SILIKO_TOK_INTEGER = 256,
+	SILIKO_TOK_FLOAT,
+	SILIKO_TOK_ID,
+	SILIKO_TOK_EOL
 };
-typedef struct SilikoDataSource SilikoDataSource;
+typedef enum SilikoTokenType SilikoTokenType;
 
-SILIKO_EXPORT SilikoDataSource *SilikoDataSourceNew(
-	void *NewState,
-	int (*NewAdvanceFunction)(void *),
-	char (*NewGetFunction)(void *),
-	void (*NewDeleteFunction)(void *)
-);
-SILIKO_EXPORT int SilikoDataSourceAdvance(SilikoDataSource *Source);
-SILIKO_EXPORT char SilikoDataSourceGet(SilikoDataSource *Source);
-SILIKO_EXPORT void SilikoDataSourceDelete(SilikoDataSource *Source);
+struct SilikoToken
+{
+	SilikoTokenType Type;
+	union
+	{
+		char *Id;
+		long long int Integer;
+		double Float;
+	};
+};
+typedef struct SilikoToken SilikoToken;
 
 #if defined __cplusplus
 }
 #endif
 
-#endif /* SILIKO_DATA_SOURCE */
+#endif /* SILIKO_TOKEN_H */
