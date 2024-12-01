@@ -26,8 +26,8 @@ set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
 
-set(SILIKO_BUNDLE_COPYRIGHT "Copyright 2012 - 2024 Vincent Damewood")
-set(SILIKO_INSTALL_APPDIR Applications  CACHE STRING
+set(SILIKUJO_BUNDLE_COPYRIGHT "Copyright 2012 - 2024 Vincent Damewood")
+set(SILIKUJO_INSTALL_APPDIR Applications  CACHE STRING
 	"Locaton to install application bundle"
 )
 
@@ -62,7 +62,7 @@ set_target_properties(SilikujoForMacOS PROPERTIES
 	MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
-	MACOSX_BUNDLE_COPYRIGHT             "${SILIKO_BUNDLE_COPYRIGHT}"
+	MACOSX_BUNDLE_COPYRIGHT             "${SILIKUJO_BUNDLE_COPYRIGHT}"
 	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 )
@@ -80,6 +80,6 @@ siliko_core_fixup_bundle(SilikujoForMacOS)
 
 install(TARGETS SilikujoForMacOS
 BUNDLE
-	DESTINATION  ${SILIKO_INSTALL_APPDIR}
+	DESTINATION  ${SILIKUJO_INSTALL_APPDIR}
 	COMPONENT    Silikujo
 )

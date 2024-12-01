@@ -55,7 +55,8 @@ else()
 	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=0)
 endif()
 
-if(APPLE AND SILIKO_BUILD_SHARED_LIBRARY)
+get_target_property(SILIKO_CORE_TYPE Siliko::SilikoCore TYPE)
+if(APPLE AND ${SILIKO_CORE_TYPE} STREQUAL SHARED_LIBRARY)
 	if (SILIKO_BUILD_FRAMEWORK)
 		set_target_properties(Silikilo PROPERTIES
 			INSTALL_RPATH                   "@executable_path/../Frameworks"
