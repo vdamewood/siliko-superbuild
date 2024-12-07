@@ -63,7 +63,7 @@ set_target_properties(SilikujoForMacOS PROPERTIES
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
 	MACOSX_BUNDLE_COPYRIGHT             "${SILIKUJO_BUNDLE_COPYRIGHT}"
-	MACOSX_BUNDLE_ICON_FILE             src/silikujo.icns
+	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist.in"
 )
 target_compile_options(SilikujoForMacOS
