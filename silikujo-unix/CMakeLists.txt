@@ -44,8 +44,8 @@ add_custom_command(
 		--generate-header
 		--target=${CMAKE_CURRENT_BINARY_DIR}/gresource.h
 		gresource.xml
-	DEPENDS gresource.xml EvalWindow.ui
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+	DEPENDS src/gresource.xml src/EvalWindow.ui
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_custom_command(
 	OUTPUT gresource.c
@@ -53,16 +53,16 @@ add_custom_command(
 		--generate-source
 		--target=${CMAKE_CURRENT_BINARY_DIR}/gresource.c
 		gresource.xml
-	DEPENDS gresource.xml EvalWindow.ui
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+	DEPENDS src/gresource.xml src/EvalWindow.ui
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_executable(SilikujoForUnix)
 target_sources(SilikujoForUnix
 	PRIVATE
-		Main.c
-		EvalWindow.c
+		src/Main.c
+		src/EvalWindow.c
 		gresource.c
-		EvalWindow.h
+		src/EvalWindow.h
 		gresource.h
 )
 set_target_properties(SilikujoForUnix PROPERTIES
@@ -77,12 +77,12 @@ RUNTIME
 	COMPONENT    Silikujo
 )
 
-install(FILES silikujo.desktop
+install(FILES src/silikujo.desktop
 	DESTINATION  "${CMAKE_INSTALL_DATADIR}/applications"
 	COMPONENT    Silikujo
 )
 
-install(FILES silikujo.png
+install(FILES src/silikujo.png
 	DESTINATION  "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps"
 	COMPONENT    Silikujo
 )

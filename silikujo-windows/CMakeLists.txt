@@ -33,15 +33,15 @@ endif()
 add_executable(SilikujoForWindows WIN32)
 target_sources(SilikujoForWindows
 	PRIVATE
-		EvalWindow.h
-		About.h
-		Id.h
-		WinMain.c
-		EvalWindow.c
-		EvalWindow.rc
-		About.c
-		About.rc
-		Icon.rc
+		src/EvalWindow.h
+		src/About.h
+		src/Id.h
+		src/WinMain.c
+		src/EvalWindow.c
+		src/EvalWindow.rc
+		src/About.c
+		src/About.rc
+		src/Icon.rc
 )
 set_target_properties(SilikujoForWindows PROPERTIES
 	OUTPUT_NAME               Silikujo
@@ -54,7 +54,7 @@ endif()
 set(VSV_DEBUG_FLAG 0)
 set(VSV_FILENAME "Silikujo.exe")
 configure_file(
-	Version.rc.in
+	src/Version.rc.in
 	${CMAKE_CURRENT_BINARY_DIR}/Version.Release.rc
 	@ONLY
 )
@@ -63,7 +63,7 @@ target_sources(SilikujoForWindows PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BI
 set(VSV_DEBUG_FLAG VS_FF_DEBUG)
 set(VSV_FILENAME "Silikujo.exe")
 configure_file(
-	Version.rc.in
+	src/Version.rc.in
 	${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc
 	@ONLY
 )

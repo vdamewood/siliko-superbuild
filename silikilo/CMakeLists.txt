@@ -35,7 +35,7 @@ find_package(Readline)
 add_executable(Silikilo)
 target_sources(Silikilo
 	PRIVATE
-		main.c
+		src/main.c
 )
 set_target_properties(Silikilo PROPERTIES
 	OUTPUT_NAME               silikilo
@@ -51,7 +51,7 @@ if(Readline_FOUND)
 	target_link_libraries(Silikilo PRIVATE Readline::Readline)
 	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=1)
 else()
-	target_sources(Silikilo PRIVATE rl.c)
+	target_sources(Silikilo PRIVATE src/rl.c)
 	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=0)
 endif()
 
@@ -78,7 +78,7 @@ if(WIN32)
 	set(VSV_DEBUG_FLAG 0)
 	set(VSV_FILENAME "silikilo.exe")
 	configure_file(
-		version.rc.in
+		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version-release.rc
 		@ONLY
 	)
@@ -87,7 +87,7 @@ if(WIN32)
 	set(VSV_DEBUG_FLAG VS_FF_DEBUG)
 	set(VSV_FILENAME "silikilo.exe")
 	configure_file(
-		version.rc.in
+		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc
 		@ONLY
   	)

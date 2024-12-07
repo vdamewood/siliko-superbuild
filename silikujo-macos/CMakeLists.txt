@@ -41,20 +41,20 @@ if (NOT IBTOOL)
 endif()
 
 add_custom_command(OUTPUT MainMenu.nib
-	COMMAND "${IBTOOL}" --compile MainMenu.nib "${CMAKE_CURRENT_SOURCE_DIR}/MainMenu.xib"
-	COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/MainMenu.xib"
+	COMMAND "${IBTOOL}" --compile MainMenu.nib "${CMAKE_CURRENT_SOURCE_DIR}/src/MainMenu.xib"
+	COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/src/MainMenu.xib"
 )
 set_source_files_properties(MainMenu.nib PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-set_source_files_properties(silikujo.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+set_source_files_properties(src/silikujo.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 add_executable(SilikujoForMacOS MACOSX_BUNDLE)
 target_sources(SilikujoForMacOS
 	PRIVATE
-		Delegate.h
-		Delegate.m
-		Main.m
+		src/Delegate.h
+		src/Delegate.m
+		src/Main.m
 		MainMenu.nib
-		silikujo.icns
+		src/silikujo.icns
 )
 set_target_properties(SilikujoForMacOS PROPERTIES
 	OUTPUT_NAME                         Silikujo
@@ -63,8 +63,8 @@ set_target_properties(SilikujoForMacOS PROPERTIES
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
 	MACOSX_BUNDLE_COPYRIGHT             "${SILIKUJO_BUNDLE_COPYRIGHT}"
-	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
-	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+	MACOSX_BUNDLE_ICON_FILE             src/silikujo.icns
+	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist.in"
 )
 target_compile_options(SilikujoForMacOS
 	PRIVATE
