@@ -21,8 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <Siliko/StringSource.h>
-#include <Siliko/InfixParser.h>
+#include <SilikoCore/StringSource.h>
+#include <SilikoCore/InfixParser.h>
 
 #include "EvalWindow.h"
 
