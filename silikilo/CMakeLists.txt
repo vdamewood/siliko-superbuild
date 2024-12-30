@@ -56,15 +56,22 @@ else()
 endif()
 
 get_target_property(SILIKO_CORE_TYPE Siliko::SilikoCore TYPE)
-if(APPLE AND ${SILIKO_CORE_TYPE} STREQUAL SHARED_LIBRARY)
-	if (SILIKO_BUILD_FRAMEWORK)
-		set_target_properties(Silikilo PROPERTIES
-			INSTALL_RPATH                   "@executable_path/../Frameworks"
-		)
+if(${SILIKO_CORE_TYPE} STREQUAL SHARED_LIBRARY)
+	if(APPLE)
+		get_target_property(SILIKO_CORE_FRAMEWORK Siliko::SilikoCore FRAMEWORK)
+		if (SILIKO_CORE_FRAMEWORK)
+			set_target_properties(Silikilo PROPERTIES
+				INSTALL_RPATH  "@executable_path/../Frameworks"
+			)
+		else()
+			set_target_properties(Silikilo PROPERTIES
+				INSTALL_RPATH  "@executable_path/../${CMAKE_INSTALL_LIBDIR}"
+			)
+		endif()
 	else()
 		set_target_properties(Silikilo PROPERTIES
-			INSTALL_RPATH                   "@executable_path/../lib"
-		)
+			INSTALL_RPATH  "\${Origin}/../${CMAKE_INSTALL_LIBDIR}"
+	)
 	endif()
 endif()
 
