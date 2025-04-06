@@ -1,5 +1,5 @@
 /* StringSource.c: Support for reading from a string
- * Copyright 2012-2024 Vincent Damewood
+ * Copyright 2012-2025 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
