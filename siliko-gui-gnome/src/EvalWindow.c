@@ -24,7 +24,7 @@
 #include <SilikoCore/InfixParser.h>
 #include <SilikoCore/Value.h>
 
-static const char GladeFile[] = "/com/vdamewood/SilikujoForUnix/EvalWindow.ui";
+static const char GladeFile[] = "/com/vdamewood/SilikoGuiGnome/EvalWindow.ui";
 
 static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 {

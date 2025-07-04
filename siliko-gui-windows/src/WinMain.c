@@ -35,7 +35,7 @@ int WINAPI WinMain(
 	if(!EvalWindowRegister(hInstance)
 		|| !(Handle = EvalWindowCreate(hInstance)))
 	{
-		MessageBox(NULL, "Silikujo failed to initialize the evaluation window.", "Startup Error", MB_ICONEXCLAMATION | MB_OK);
+		MessageBox(NULL, "Siliko GUI failed to initialize the evaluation window.", "Startup Error", MB_ICONEXCLAMATION | MB_OK);
 		return 1;
 	}
 

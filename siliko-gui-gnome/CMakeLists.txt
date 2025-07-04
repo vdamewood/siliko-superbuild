@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build Script
-# Copyright 2012-2024 Vincent Damewood
+# Copyright 2012-2025 Vincent Damewood
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-project(SilikujoForUnix
+project(SilikoGuiGnome
 	VERSION       0.0.0
-	DESCRIPTION   "GUI frontend for Siliko for Unix"
+	DESCRIPTION   "GUI frontend for Siliko for Gnome"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
@@ -56,8 +56,8 @@ add_custom_command(
 	DEPENDS src/gresource.xml src/EvalWindow.ui
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(SilikujoForUnix)
-target_sources(SilikujoForUnix
+add_executable(SilikoGuiGnome)
+target_sources(SilikoGuiGnome
 	PRIVATE
 		src/Main.c
 		src/EvalWindow.c
@@ -65,24 +65,28 @@ target_sources(SilikujoForUnix
 		src/EvalWindow.h
 		gresource.h
 )
-set_target_properties(SilikujoForUnix PROPERTIES
-	OUTPUT_NAME               Silikujo
+set_target_properties(SilikoGuiGnome PROPERTIES
+	OUTPUT_NAME               siliko-gui-gnome
 )
-target_compile_features(SilikujoForUnix PRIVATE c_std_11)
-target_link_libraries(SilikujoForUnix PRIVATE Siliko::SilikoCore PkgConfig::Gtk)
+target_compile_features(SilikoGuiGnome PRIVATE c_std_11)
+target_link_libraries(SilikoGuiGnome
+	PRIVATE
+		Siliko::SilikoCore
+		PkgConfig::Gtk
+)
 
-install(TARGETS SilikujoForUnix
+install(TARGETS SilikoGuiGnome
 RUNTIME
 	DESTINATION  ${CMAKE_INSTALL_BINDIR}
-	COMPONENT    Silikujo
+	COMPONENT    SilikoGuiGnome
 )
 
-install(FILES src/silikujo.desktop
+install(FILES src/siliko-gui-gnome.desktop
 	DESTINATION  "${CMAKE_INSTALL_DATADIR}/applications"
-	COMPONENT    Silikujo
+	COMPONENT    SilikoGuiGnome
 )
 
-install(FILES src/silikujo.png
+install(FILES src/siliko-gui-gnome.png
 	DESTINATION  "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps"
-	COMPONENT    Silikujo
+	COMPONENT    SilikoGuiGnome
 )

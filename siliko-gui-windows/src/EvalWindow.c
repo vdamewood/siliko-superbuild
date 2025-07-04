@@ -182,7 +182,7 @@ HWND EvalWindowCreate(HINSTANCE hInstance)
 	return CreateWindowEx(
 		WS_EX_CLIENTEDGE,
 		"EvalWindow",
-		"Silikujo",
+		"Siliko GUI",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT, MIN_WIDTH, MIN_HEIGHT,
 		NULL, NULL, hInstance, NULL);

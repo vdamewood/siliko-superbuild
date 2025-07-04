@@ -14,11 +14,11 @@
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
-                <menuItem title="Silikujo" id="1Xt-HY-uBw">
+                <menuItem title="Siliko GUI" id="1Xt-HY-uBw">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="Silikujo" systemMenu="apple" id="uQy-DD-JDr">
+                    <menu key="submenu" title="Siliko GUI" systemMenu="apple" id="uQy-DD-JDr">
                         <items>
-                            <menuItem title="About Silikujo" id="5kV-Vb-QxS">
+                            <menuItem title="About Siliko GUI" id="5kV-Vb-QxS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
@@ -32,7 +32,7 @@
                                 <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                            <menuItem title="Hide Silikujo" keyEquivalent="h" id="Olw-nP-bQN">
+                            <menuItem title="Hide Siliko GUI" keyEquivalent="h" id="Olw-nP-bQN">
                                 <connections>
                                     <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
                                 </connections>
@@ -50,7 +50,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                            <menuItem title="Quit Silikujo" keyEquivalent="q" id="4sb-4s-VLi">
+                            <menuItem title="Quit Siliko GUI" keyEquivalent="q" id="4sb-4s-VLi">
                                 <connections>
                                     <action selector="terminate:" target="-1" id="Te7-pn-YzF"/>
                                 </connections>
@@ -60,7 +60,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="Silikujo" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="LYD-3a-ke1">
+        <window title="Siliko GUI" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="LYD-3a-ke1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="131" y="158" width="480" height="92"/>
@@ -102,7 +102,7 @@
             </view>
             <point key="canvasLocation" x="237" y="277"/>
         </window>
-        <customObject id="pqC-tj-zf1" customClass="SilikujoDelegate">
+        <customObject id="pqC-tj-zf1" customClass="SilikoGuiDelegate">
             <connections>
                 <outlet property="input" destination="hdQ-a4-KjY" id="Ufv-eV-9Gg"/>
                 <outlet property="output" destination="Ybg-wu-Upo" id="DWa-p1-GXU"/>

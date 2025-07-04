@@ -16,7 +16,7 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-project(SilikujoForWindows
+project(SilikoGuiWindows
 	VERSION       0.0.0
 	DESCRIPTION   "GUI frontend for Siliko for Windows"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
@@ -30,8 +30,8 @@ if(NOT TARGET Siliko::SilikoCore)
 	find_package(SilikoCore REQUIRED)
 endif()
 
-add_executable(SilikujoForWindows WIN32)
-target_sources(SilikujoForWindows
+add_executable(SilikoGuiWindows WIN32)
+target_sources(SilikoGuiWindows
 	PRIVATE
 		src/EvalWindow.h
 		src/About.h
@@ -43,8 +43,8 @@ target_sources(SilikujoForWindows
 		src/About.rc
 		src/Icon.rc
 )
-set_target_properties(SilikujoForWindows PROPERTIES
-	OUTPUT_NAME               Silikujo
+set_target_properties(SilikoGuiWindows PROPERTIES
+	OUTPUT_NAME               siliko-gui-windows
 )
 if(PRERELEASE_SUFFIX STREQUAL "")
 	set(VSV_PRERELEASE_FLAG 0)
@@ -52,27 +52,27 @@ else()
 	set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
 endif()
 set(VSV_DEBUG_FLAG 0)
-set(VSV_FILENAME "Silikujo.exe")
+set(VSV_FILENAME "siliko-gui-windows.exe")
 configure_file(
 	src/Version.rc.in
 	${CMAKE_CURRENT_BINARY_DIR}/Version.Release.rc
 	@ONLY
 )
-target_sources(SilikujoForWindows PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/Version.Release.rc>)
+target_sources(SilikoGuiWindows PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/Version.Release.rc>)
 
 set(VSV_DEBUG_FLAG VS_FF_DEBUG)
-set(VSV_FILENAME "Silikujo.exe")
+set(VSV_FILENAME "siliko-gui-windows.exe")
 configure_file(
 	src/Version.rc.in
 	${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc
 	@ONLY
 )
-target_sources(SilikujoForWindows PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc>)
-target_compile_features(SilikujoForWindows PRIVATE c_std_11)
-target_link_libraries(SilikujoForWindows PRIVATE Siliko::SilikoCore)
+target_sources(SilikoGuiWindows PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/Version.Debug.rc>)
+target_compile_features(SilikoGuiWindows PRIVATE c_std_11)
+target_link_libraries(SilikoGuiWindows PRIVATE Siliko::SilikoCore)
 
-install(TARGETS SilikujoForWindows
+install(TARGETS SilikoGuiWindows
 RUNTIME
 	DESTINATION  ${CMAKE_INSTALL_BINDIR}
-	COMPONENT    Silikujo
+	COMPONENT    SilikoGuiWindows
 )

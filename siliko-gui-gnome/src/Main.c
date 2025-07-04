@@ -1,4 +1,4 @@
-/* Main.c: Entry point for GUI program
+/* Main.c: Entry point for Siliko GUI
  * Copyright 2012-2025 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ static void activate(GtkApplication *app, gpointer user_data)
 
 int main(int argc, char *argv[])
 {
-	GtkApplication *app = gtk_application_new("com.vdamewood.SilikujoForUnix", G_APPLICATION_DEFAULT_FLAGS);
+	GtkApplication *app = gtk_application_new("com.vdamewood.SilikoGuiGnome", G_APPLICATION_DEFAULT_FLAGS);
 	SilikoFunctionCallerSetUp();
 
 	g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);

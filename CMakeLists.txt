@@ -16,24 +16,24 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-option(SILIKO_BUILD_CLI  "Build Silikilo, a command-line interface for Siliko" On)
-option(SILIKO_BUILD_GUI  "Build Silikujo, a GUI interface for Siliko" On)
+option(SILIKO_BUILD_CLI  "Build a command-line interface for Siliko" On)
+option(SILIKO_BUILD_GUI  "Build a GUI interface for Siliko" On)
 
 project(Siliko)
 
 add_subdirectory(siliko-core)
 
 if(SILIKO_BUILD_CLI)
-	add_subdirectory(silikilo)
+	add_subdirectory(siliko-cli)
 endif()
 
 if(SILIKO_BUILD_GUI)
 	if(APPLE)
-		add_subdirectory(silikujo-macos)
+		add_subdirectory(siliko-gui-macos)
 	elseif(UNIX)
-		add_subdirectory(silikujo-unix)
+		add_subdirectory(siliko-gui-gnome)
 	elseif(WIN32)
-		add_subdirectory(silikujo-windows)
+		add_subdirectory(siliko-gui-windows)
 	else()
 		message(FATAL_ERROR "A GUI program is not available for this system.")
 	endif()

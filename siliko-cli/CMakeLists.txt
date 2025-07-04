@@ -16,7 +16,7 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-project(Silikilo
+project(SilikoCli
 	VERSION       0.0.0
 	DESCRIPTION   "Command-line frontend for Siliko"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
@@ -32,27 +32,27 @@ if(NOT TARGET Siliko::SilikoCore)
 endif()
 find_package(Readline)
 
-add_executable(Silikilo)
-target_sources(Silikilo
+add_executable(SilikoCli)
+target_sources(SilikoCli
 	PRIVATE
 		src/main.c
 )
-set_target_properties(Silikilo PROPERTIES
-	OUTPUT_NAME               silikilo
+set_target_properties(SilikoCli PROPERTIES
+	OUTPUT_NAME               siliko
 )
-target_compile_features(Silikilo PRIVATE c_std_11)
-target_link_libraries(Silikilo PRIVATE Siliko::SilikoCore)
+target_compile_features(SilikoCli PRIVATE c_std_11)
+target_link_libraries(SilikoCli PRIVATE Siliko::SilikoCore)
 
 if (UNIX)
-	target_compile_definitions(Silikilo PRIVATE USE_UNIX=1)
+	target_compile_definitions(SilikoCli PRIVATE USE_UNIX=1)
 endif()
 
 if(Readline_FOUND)
-	target_link_libraries(Silikilo PRIVATE Readline::Readline)
-	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=1)
+	target_link_libraries(SilikoCli PRIVATE Readline::Readline)
+	target_compile_definitions(SilikoCli PRIVATE HAVE_READLINE=1)
 else()
-	target_sources(Silikilo PRIVATE src/rl.c)
-	target_compile_definitions(Silikilo PRIVATE HAVE_READLINE=0)
+	target_sources(SilikoCli PRIVATE src/rl.c)
+	target_compile_definitions(SilikoCli PRIVATE HAVE_READLINE=0)
 endif()
 
 get_target_property(SILIKO_CORE_TYPE Siliko::SilikoCore TYPE)
@@ -60,16 +60,16 @@ if(${SILIKO_CORE_TYPE} STREQUAL SHARED_LIBRARY)
 	if(APPLE)
 		get_target_property(SILIKO_CORE_FRAMEWORK Siliko::SilikoCore FRAMEWORK)
 		if (SILIKO_CORE_FRAMEWORK)
-			set_target_properties(Silikilo PROPERTIES
+			set_target_properties(SilikoCli PROPERTIES
 				INSTALL_RPATH  "@executable_path/../Frameworks"
 			)
 		else()
-			set_target_properties(Silikilo PROPERTIES
+			set_target_properties(SilikoCli PROPERTIES
 				INSTALL_RPATH  "@executable_path/../${CMAKE_INSTALL_LIBDIR}"
 			)
 		endif()
 	else()
-		set_target_properties(Silikilo PROPERTIES
+		set_target_properties(SilikoCli PROPERTIES
 			INSTALL_RPATH  "\${Origin}/../${CMAKE_INSTALL_LIBDIR}"
 	)
 	endif()
@@ -83,26 +83,26 @@ if(WIN32)
 	endif()
 
 	set(VSV_DEBUG_FLAG 0)
-	set(VSV_FILENAME "silikilo.exe")
+	set(VSV_FILENAME "siliko.exe")
 	configure_file(
 		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version-release.rc
 		@ONLY
 	)
-	target_sources(Silikilo PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
+	target_sources(SilikoCli PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
 
 	set(VSV_DEBUG_FLAG VS_FF_DEBUG)
-	set(VSV_FILENAME "silikilo.exe")
+	set(VSV_FILENAME "siliko.exe")
 	configure_file(
 		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc
 		@ONLY
   	)
-	target_sources(Silikilo PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
+	target_sources(SilikoCli PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
 endif()
 
-install(TARGETS Silikilo
+install(TARGETS SilikoCli
 RUNTIME
 	DESTINATION  ${CMAKE_INSTALL_BINDIR}
-	COMPONENT    Silikilo
+	COMPONENT    SilikoCli
 )

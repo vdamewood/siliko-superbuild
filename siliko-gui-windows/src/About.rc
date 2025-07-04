@@ -20,20 +20,20 @@
 
 ABOUT_DIALOG DIALOG DISCARDABLE  0, 0, 240, 110
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "About Silikujo"
+CAPTION "About Siliko"
 FONT 8, "MS Sans Serif"
 
 BEGIN
 	CTEXT
-		"Silikujo is a simple calculator using the Siliko library.",
+		"Siliko GUI is a simple calculator using the Siliko Core library.",
 		-1,
 		8,8,220,8
 	CTEXT
-		"Silikujo is licensed under the terms of the GNU General Public License, version 3 or later as released by the Free Software Foundation.",
+		"Siliko GUI is licensed under the terms of the GNU General Public License, version 3 or later as released by the Free Software Foundation.",
 		-1,
 		8,24,220,24
 	CTEXT
-		"Siliko is licensed under the terms of the GNU Lesser General Public License, version 3 or later as released by the Free Software Foundation.",
+		"Siliko Core is licensed under the terms of the GNU Lesser General Public License, version 3 or later as released by the Free Software Foundation.",
 		-1,
 		8,56,220,24
 	DEFPUSHBUTTON

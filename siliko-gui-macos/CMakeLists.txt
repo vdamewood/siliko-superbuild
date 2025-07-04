@@ -16,7 +16,7 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-project(SilikujoForMacOS
+project(SilikoGuiMacOS
 	VERSION       0.0.0
 	DESCRIPTION   "GUI frontend for Siliko for macOS"
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
@@ -26,8 +26,8 @@ set(PRERELEASE_SUFFIX "indev")
 
 include(GNUInstallDirs)
 
-set(SILIKUJO_BUNDLE_COPYRIGHT "Copyright 2012 - 2024 Vincent Damewood")
-set(SILIKUJO_INSTALL_APPDIR Applications  CACHE STRING
+set(SILIKO_GUI_MACOS_BUNDLE_COPYRIGHT "Copyright 2012 - 2025 Vincent Damewood")
+set(SILIKO_GUI_MACOS_INSTALL_APPDIR Applications  CACHE STRING
 	"Locaton to install application bundle"
 )
 
@@ -45,41 +45,41 @@ add_custom_command(OUTPUT MainMenu.nib
 	COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/src/MainMenu.xib"
 )
 set_source_files_properties(MainMenu.nib PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-set_source_files_properties(src/silikujo.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+set_source_files_properties(src/siliko-gui-macos.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-add_executable(SilikujoForMacOS MACOSX_BUNDLE)
-target_sources(SilikujoForMacOS
+add_executable(SilikoGuiMacOS MACOSX_BUNDLE)
+target_sources(SilikoGuiMacOS
 	PRIVATE
 		src/Delegate.h
 		src/Delegate.m
 		src/Main.m
 		MainMenu.nib
-		src/silikujo.icns
+		src/siliko-gui-macos.icns
 )
-set_target_properties(SilikujoForMacOS PROPERTIES
-	OUTPUT_NAME                         Silikujo
-	MACOSX_BUNDLE_GUI_IDENTIFIER        "com.vdamewood.SilikujoForMacOS"
-	MACOSX_BUNDLE_BUNDLE_NAME           "Silikujo"
+set_target_properties(SilikoGuiMacOS PROPERTIES
+	OUTPUT_NAME                         "Siliko GUI"
+	MACOSX_BUNDLE_GUI_IDENTIFIER        "com.vdamewood.SilikoGuiMacOS"
+	MACOSX_BUNDLE_BUNDLE_NAME           "Siliko GUI"
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
-	MACOSX_BUNDLE_COPYRIGHT             "${SILIKUJO_BUNDLE_COPYRIGHT}"
-	MACOSX_BUNDLE_ICON_FILE             silikujo.icns
+	MACOSX_BUNDLE_COPYRIGHT             "${SILIKO_GUI_MACOS_BUNDLE_COPYRIGHT}"
+	MACOSX_BUNDLE_ICON_FILE             siliko-gui-macos.icns
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist.in"
 )
-target_compile_options(SilikujoForMacOS
+target_compile_options(SilikoGuiMacOS
 	PRIVATE
 		"-fobjc-arc"
 )
-target_compile_features(SilikujoForMacOS PRIVATE c_std_11)
-target_link_libraries(SilikujoForMacOS
+target_compile_features(SilikoGuiMacOS PRIVATE c_std_11)
+target_link_libraries(SilikoGuiMacOS
 	PRIVATE
 		Siliko::SilikoCore
 		"-framework Cocoa"
 )
-siliko_core_fixup_bundle(SilikujoForMacOS)
+siliko_core_fixup_bundle(SilikoGuiMacOS)
 
-install(TARGETS SilikujoForMacOS
+install(TARGETS SilikoGuiMacOS
 BUNDLE
-	DESTINATION  ${SILIKUJO_INSTALL_APPDIR}
-	COMPONENT    Silikujo
+	DESTINATION  ${SILIKO_GUI_MACOS_INSTALL_APPDIR}
+	COMPONENT    SilikoGuiMacOS
 )

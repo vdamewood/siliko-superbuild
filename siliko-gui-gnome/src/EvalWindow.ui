@@ -3,7 +3,7 @@
   <requires lib="gtk+" version="4.0"/>
   <object class="GtkWindow" id="EvalWindow">
     <property name="height-request">60</property>
-    <property name="title" translatable="yes">Silikujo</property>
+    <property name="title" translatable="yes">Siliko GUI</property>
     <property name="width-request">400</property>
     <child>
       <object class="GtkGrid">
