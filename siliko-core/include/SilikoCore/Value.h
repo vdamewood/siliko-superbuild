@@ -27,7 +27,7 @@ extern "C" {
 enum SilikoValueStatus
 {
 	SILIKO_VAL_INTEGER,       /* Success: The value is an integer. */
-	SILIKO_VAL_FLOAT,         /* Success: The valis is a float. */
+	SILIKO_VAL_FLOAT,         /* Success: The value is a float. */
 	SILIKO_VAL_MEMORY_ERR,    /* Error: An attempt to allocate memory
 				    failed. */
 	SILIKO_VAL_SYNTAX_ERR,    /* Error: A syntax error was
