@@ -70,7 +70,7 @@ if(${SILIKO_CORE_TYPE} STREQUAL SHARED_LIBRARY)
 		endif()
 	else()
 		set_target_properties(SilikoCli PROPERTIES
-			INSTALL_RPATH  "\${Origin}/../${CMAKE_INSTALL_LIBDIR}"
+			INSTALL_RPATH  "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}"
 	)
 	endif()
 endif()
