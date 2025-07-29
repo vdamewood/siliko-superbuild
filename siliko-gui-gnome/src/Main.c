@@ -17,8 +17,6 @@
 
 #include <gtk/gtk.h>
 
-#include <SilikoCore/FunctionCaller.h>
-
 #include "EvalWindow.h"
 
 static void activate(GtkApplication *app, gpointer user_data)
@@ -32,12 +30,10 @@ static void activate(GtkApplication *app, gpointer user_data)
 int main(int argc, char *argv[])
 {
 	GtkApplication *app = gtk_application_new("com.vdamewood.SilikoGuiGnome", G_APPLICATION_DEFAULT_FLAGS);
-	SilikoFunctionCallerSetUp();
 
 	g_signal_connect(app, "activate", G_CALLBACK (activate), NULL);
 	int status = g_application_run(G_APPLICATION (app), argc, argv);
 
-	SilikoFunctionCallerTearDown();
 	g_object_unref(app);
 
 	return status;

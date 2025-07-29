@@ -19,6 +19,7 @@
 #define SILIKO_SYNTAX_TREE_H
 
 #include <SilikoCore/Api.h>
+#include <SilikoCore/FunctionCaller.h>
 #include <SilikoCore/Value.h>
 
 #if defined __cplusplus
@@ -45,7 +46,7 @@ SILIKOCORE_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *SyntaxTree);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNodeType SilikoSyntaxTreeGetType(SilikoSyntaxTreeNode *SyntaxTree);
 SILIKOCORE_EXPORT int SilikoSyntaxTreeIsError(SilikoSyntaxTreeNode *SyntaxTree);
 
-SILIKOCORE_EXPORT SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree);
+SILIKOCORE_EXPORT SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree, SilikoFunctionCaller *Caller);
 SILIKOCORE_EXPORT int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
 
 SILIKOCORE_EXPORT int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);

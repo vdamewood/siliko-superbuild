@@ -36,13 +36,12 @@ void add_history(const char *);
 
 #include <SilikoCore/FunctionCaller.h>
 #include <SilikoCore/InfixParser.h>
-#include <SilikoCore/Value.h>
 #include <SilikoCore/StringSource.h>
+#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/Value.h>
 
 int main(int argc, char *argv[])
 {
-	SilikoValue value;
-	SilikoSyntaxTreeNode *tree;
 	const char *prompt;
 	const char *response;
 
@@ -57,7 +56,8 @@ int main(int argc, char *argv[])
 		response = "";
 	}
 
-	SilikoFunctionCallerSetUp();
+	SilikoFunctionCaller *caller = SilikoFunctionCallerNew();
+	SilikoFunctionCallerInstallAllFunctions(caller);
 
 	char *expression = NULL;
 	char *old_expression = NULL;
@@ -79,19 +79,19 @@ int main(int argc, char *argv[])
 		free(old_expression);
 		old_expression = NULL;
 
-		tree = SilikoParseInfix(
+		SilikoSyntaxTreeNode *tree = SilikoParseInfix(
 			SilikoStringSourceNew(expression));
-		value = SilikoSyntaxTreeEvaluate(tree);
+		struct SilikoValue value = SilikoSyntaxTreeEvaluate(tree, caller);
 		SilikoSyntaxTreeDelete(tree);
 
 		char *ResultString = SilikoValueToString(value);
 		printf("%s\n", ResultString);
-		free(ResultString);
+		SilikoValueDeleteString(ResultString);
 
 		old_expression = expression;
 	}
 
-	SilikoFunctionCallerTearDown();
+	SilikoFunctionCallerDelete(caller);
 
 	if (ISATTY())
 	{

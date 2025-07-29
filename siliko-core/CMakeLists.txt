@@ -66,9 +66,7 @@ target_sources(SilikoCore
 	PRIVATE
 		${PUBLIC_HEADERS}
 		src/Functions.h
-		src/Hash.h
 		src/Value.c
-		src/Hash.c
 		src/Functions.c
 		src/FunctionCaller.c
 		src/SyntaxTree.c

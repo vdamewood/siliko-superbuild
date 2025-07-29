@@ -21,8 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <SilikoCore/StringSource.h>
+#include <SilikoCore/FunctionCaller.h>
 #include <SilikoCore/InfixParser.h>
+#include <SilikoCore/StringSource.h>
+#include <SilikoCore/SyntaxTree.h>
+#include <SilikoCore/Value.h>
 
 #include "EvalWindow.h"
 
@@ -70,6 +73,16 @@ void OnCreate(HWND Handle)
 		MIN_WIDTH - BUTTON_X, BUTTON_Y, BUTTON_WT, BUTTON_HT,
 		Handle, (HMENU)CALCULATOR_BUTTON,
 		GetModuleHandle(NULL), NULL);
+	SilikoFunctionCaller *caller = SilikoFunctionCallerNew();
+	SilikoFunctionCallerInstallAllFunctions(caller);
+	SetProp(Handle, "Caller", caller);
+}
+
+void OnClose(HWND Handle)
+{
+	SilikoFunctionCaller *caller = RemoveProp(Handle, "Caller");
+	SilikoFunctionCallerDelete(caller);
+	DestroyWindow(Handle);
 }
 
 
@@ -103,6 +116,8 @@ void OnCalculate(HWND hwnd)
 	SilikoSyntaxTreeNode *Node;
 	SilikoValue Value;
 
+	SilikoFunctionCaller *caller = GetProp(hwnd, "Caller");
+
 	ExpressionSize = GetWindowTextLength(GetDlgItem(hwnd, CALCULATOR_INPUT)) + 1;
 	tmpString = (char*)GlobalAlloc(GPTR, ExpressionSize);
 	GetDlgItemText(hwnd, CALCULATOR_INPUT, tmpString, ExpressionSize);
@@ -110,7 +125,7 @@ void OnCalculate(HWND hwnd)
 	Node = SilikoParseInfix(SilikoStringSourceNew(tmpString));
 	GlobalFree((HANDLE)tmpString);
 
-	Value = SilikoSyntaxTreeEvaluate(Node);
+	Value = SilikoSyntaxTreeEvaluate(Node, caller);
 	free(Node);
 
 	tmpString = SilikoValueToString(Value);
@@ -132,7 +147,7 @@ LRESULT CALLBACK EvalWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		OnSize(hwnd);
 		return 0;
 	case WM_CLOSE:
-		DestroyWindow(hwnd);
+		OnClose(hwnd);
 		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);

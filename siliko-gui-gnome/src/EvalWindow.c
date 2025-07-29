@@ -20,21 +20,25 @@
 
 #include <gtk/gtk.h>
 
-#include <SilikoCore/StringSource.h>
+#include <SilikoCore/FunctionCaller.h>
 #include <SilikoCore/InfixParser.h>
+#include <SilikoCore/StringSource.h>
+#include <SilikoCore/SyntaxTree.h>
 #include <SilikoCore/Value.h>
 
 static const char GladeFile[] = "/com/vdamewood/SilikoGuiGnome/EvalWindow.ui";
 
 static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 {
+	SilikoFunctionCaller *caller = g_object_get_data(G_OBJECT(EvalWindow), "Caller");
+
 	SilikoSyntaxTreeNode *ResultTree =
 		SilikoParseInfix(
 		SilikoStringSourceNew(
 		gtk_editable_get_text(
 		GTK_EDITABLE(
 		gtk_builder_get_object(GTK_BUILDER(EvalWindow), "Input")))));
-	SilikoValue Value = SilikoSyntaxTreeEvaluate(ResultTree);
+	SilikoValue Value = SilikoSyntaxTreeEvaluate(ResultTree, caller);
 	SilikoSyntaxTreeDelete(ResultTree);
 
 	char *ResultString = SilikoValueToString(Value);
@@ -48,6 +52,9 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 
 static gboolean Cleanup(GtkWidget *Widget, gpointer EvalWindow)
 {
+	SilikoFunctionCaller *caller = g_object_get_data(G_OBJECT(EvalWindow), "Caller");
+	SilikoFunctionCallerDelete(caller);
+
 	g_object_unref(EvalWindow);
 	return FALSE;
 }
@@ -55,6 +62,13 @@ static gboolean Cleanup(GtkWidget *Widget, gpointer EvalWindow)
 GtkBuilder *EvalWindowNewBuilder(void)
 {
 	GtkBuilder *EvalWindow = gtk_builder_new_from_resource(GladeFile);
+
+	SilikoFunctionCaller *caller = SilikoFunctionCallerNew();
+	SilikoFunctionCallerInstallAllFunctions(caller);
+	g_object_set_data(
+		G_OBJECT(EvalWindow),
+		"Caller",
+		caller);
 
 	g_signal_connect(
 		gtk_builder_get_object(EvalWindow, "CalculateButton"),

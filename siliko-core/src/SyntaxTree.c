@@ -276,7 +276,7 @@ static int IsNumber(SilikoValue n)
 	return n.Status == SILIKO_VAL_INTEGER || n.Status == SILIKO_VAL_FLOAT;
 }
 
-static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch)
+static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunctionCaller *Caller)
 {
 	SilikoValue rVal;
 	SilikoValue *Arguments = NULL;
@@ -292,7 +292,7 @@ static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch)
 
 		for(int i = 0; i < Branch->Count; i++)
 		{
-			Arguments[i] = SilikoSyntaxTreeEvaluate(Branch->Children[i]);
+			Arguments[i] = SilikoSyntaxTreeEvaluate(Branch->Children[i], Caller);
 			if(!IsNumber(Arguments[i]))
 			{
 				rVal = Arguments[i];
@@ -302,7 +302,7 @@ static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch)
 		}
 	}
 
-	rVal = SilikoFunctionCallerCall(Branch->Id, Branch->Count, Arguments);
+	rVal = SilikoFunctionCallerCall(Caller, Branch->Id, Branch->Count, Arguments);
 	free(Arguments);
 
 	if (Branch->IsNegated)
@@ -316,7 +316,7 @@ static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch)
 	return rVal;
 }
 
-SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node)
+SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunctionCaller *Caller)
 {
 	SilikoValue rVal;
 
@@ -331,7 +331,7 @@ SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node)
 	case SILIKO_AST_LEAF:
 		return Node->Leaf;
 	case SILIKO_AST_BRANCH:
-		return EvaluateBranch(Node->Branch);
+		return EvaluateBranch(Node->Branch, Caller);
 	default: // Shouldn't happen, but just in case.
 		rVal.Status = SILIKO_VAL_SYNTAX_ERR;
 		return rVal;

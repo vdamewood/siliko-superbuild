@@ -25,12 +25,19 @@
 extern "C" {
 #endif
 
+struct SilikoFunctionCaller;
+typedef struct SilikoFunctionCaller SilikoFunctionCaller;
+
 typedef SilikoValue (*SilikoFunctionPointer)(int, SilikoValue *);
 
-SILIKOCORE_EXPORT int SilikoFunctionCallerSetUp(void);
-SILIKOCORE_EXPORT void SilikoFunctionCallerTearDown(void);
-SILIKOCORE_EXPORT SilikoValue SilikoFunctionCallerCall(const char *FunctionName, int ArgumentCount, SilikoValue *Arguments);
-SILIKOCORE_EXPORT int SilikoFunctionCallerInstall(const char *FunctionName, SilikoFunctionPointer Function);
+SILIKOCORE_EXPORT SilikoFunctionCaller *SilikoFunctionCallerNew();
+SILIKOCORE_EXPORT void SilikoFunctionCallerDelete(SilikoFunctionCaller *);
+
+SILIKOCORE_EXPORT int SilikoFunctionCallerInstallOperators(SilikoFunctionCaller *Caller);
+SILIKOCORE_EXPORT int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *Caller);
+SILIKOCORE_EXPORT int SilikoFunctionCallerInstallAllFunctions(SilikoFunctionCaller *Caller);
+SILIKOCORE_EXPORT SilikoValue SilikoFunctionCallerCall(SilikoFunctionCaller *Caller, const char *FunctionName, int ArgumentCount, SilikoValue *Arguments);
+SILIKOCORE_EXPORT int SilikoFunctionCallerInstall(SilikoFunctionCaller *Caller, const char *FunctionName, SilikoFunctionPointer Function);
 
 #if defined __cplusplus
 }

@@ -1,5 +1,5 @@
 /* Delegate.m: Delegate for Cocoa
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2025 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,19 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <SilikoCore/StringSource.h>
 #include <SilikoCore/InfixParser.h>
+#include <SilikoCore/StringSource.h>
 #include <SilikoCore/SyntaxTree.h>
-#include <SilikoCore/FunctionCaller.h>
+#include <SilikoCore/Value.h>
 
 #import "Delegate.h"
 
 @implementation SilikoGuiDelegate
 
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	SilikoFunctionCallerSetUp();
+	self.caller = SilikoFunctionCallerNew();
+	SilikoFunctionCallerInstallAllFunctions(self.caller);
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
@@ -37,7 +37,7 @@
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification
 {
-	SilikoFunctionCallerTearDown();
+	SilikoFunctionCallerDelete(self.caller);
 }
 
 - (IBAction) Calculate:(id)sender
@@ -46,7 +46,7 @@
 	SilikoValue Result;
 
 	Ast = SilikoParseInfix(SilikoStringSourceNew([[self.input stringValue] UTF8String]));
-	Result = SilikoSyntaxTreeEvaluate(Ast);
+	Result = SilikoSyntaxTreeEvaluate(Ast, self.caller);
 	SilikoSyntaxTreeDelete(Ast);
 
 	char *ResultCString = SilikoValueToString(Result);

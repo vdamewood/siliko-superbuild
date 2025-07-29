@@ -1,5 +1,5 @@
 /* Delegate.h: Delegate for Cocoa
- * Copyright 2012-2021 Vincent Damewood
+ * Copyright 2012-2025 Vincent Damewood
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,10 +17,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include <SilikoCore/FunctionCaller.h>
+
 @interface SilikoGuiDelegate : NSObject <NSApplicationDelegate>
 
 @property (weak) IBOutlet NSTextField *input;
 @property (weak) IBOutlet NSTextField *output;
+@property SilikoFunctionCaller *caller;
 
 -(IBAction) Calculate:(id)sender;
 

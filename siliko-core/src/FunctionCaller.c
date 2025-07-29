@@ -18,6 +18,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <time.h>
 
@@ -25,7 +26,6 @@
 #include <SilikoCore/Value.h>
 
 #include "Functions.h"
-#include "Hash.h"
 
 #if defined _WIN32
 #define strdup _strdup
@@ -39,69 +39,33 @@ struct SilikoFunctionChain
 };
 typedef struct SilikoFunctionChain SilikoFunctionChain;
 
-static SilikoFunctionChain *functionTable[256];
+#define TableSize 127
 
-int SilikoFunctionCallerInstall(const char *name, SilikoFunctionPointer function)
+static uint8_t hash(const char *input)
 {
-	int bucket = SilikoHash((const unsigned char *)name, strlen(name));
-	SilikoFunctionChain  *newNode;
-
-	if (!(newNode = malloc(sizeof(SilikoFunctionChain))))
-		return 0;
-
-	newNode->id = strdup(name);
-	newNode->function = function;
-	newNode->next = NULL;
-
-	if (functionTable[bucket])
-	{
-		SilikoFunctionChain *currentNode = functionTable[bucket];
-		while (currentNode->next)
-			currentNode = currentNode->next;
-		currentNode->next = newNode;
-	}
-	else
-	{
-		functionTable[bucket] = newNode;
-	}
-
-	return -1;
+	uint16_t remainder = 0;
+	for (const uint8_t *i = (const uint8_t *)input; *i; i++)
+        	remainder = ((remainder << 1) + *i) % TableSize;
+	return remainder;
 }
 
-int SilikoFunctionCallerSetUp()
+struct SilikoFunctionCaller
 {
-	SilikoFunctionCallerInstall("add", SilikoFunction_add);
-	SilikoFunctionCallerInstall("subtract", SilikoFunction_subtract);
-	SilikoFunctionCallerInstall("multiply", SilikoFunction_multiply);
-	SilikoFunctionCallerInstall("divide", SilikoFunction_divide);
-	SilikoFunctionCallerInstall("power", SilikoFunction_power);
-	SilikoFunctionCallerInstall("dice", SilikoFunction_dice);
-	SilikoFunctionCallerInstall("abs", SilikoFunction_abs);
-	SilikoFunctionCallerInstall("acos", SilikoFunction_acos);
-	SilikoFunctionCallerInstall("asin", SilikoFunction_asin);
-	SilikoFunctionCallerInstall("atan", SilikoFunction_atan);
-	SilikoFunctionCallerInstall("ceil", SilikoFunction_ceil);
-	SilikoFunctionCallerInstall("cos", SilikoFunction_cos);
-	SilikoFunctionCallerInstall("cosh", SilikoFunction_cosh);
-	SilikoFunctionCallerInstall("exp", SilikoFunction_exp);
-	SilikoFunctionCallerInstall("floor", SilikoFunction_floor);
-	SilikoFunctionCallerInstall("log", SilikoFunction_log);
-	SilikoFunctionCallerInstall("log10", SilikoFunction_log10);
-	SilikoFunctionCallerInstall("sin", SilikoFunction_sin);
-	SilikoFunctionCallerInstall("sinh", SilikoFunction_sinh);
-	SilikoFunctionCallerInstall("sqrt", SilikoFunction_sqrt);
-	SilikoFunctionCallerInstall("tan", SilikoFunction_tan);
-	SilikoFunctionCallerInstall("tanh", SilikoFunction_tanh);
-	return -1;
+	SilikoFunctionChain *table[TableSize];
+};
+
+SilikoFunctionCaller *SilikoFunctionCallerNew()
+{
+	return calloc(1, sizeof(SilikoFunctionCaller));
 }
 
-void SilikoFunctionCallerTearDown(void)
+void SilikoFunctionCallerDelete(SilikoFunctionCaller *Caller)
 {
-	for (size_t i = 0; i < sizeof(functionTable)/sizeof(functionTable[0]); i++)
+	for (size_t i = 0; i < sizeof(Caller->table)/sizeof(Caller->table[0]); i++)
 	{
-		if (functionTable[i])
+		if (Caller->table[i])
 		{
-			SilikoFunctionChain *current = functionTable[i];
+			SilikoFunctionChain *current = Caller->table[i];
 			while (current)
 			{
 				SilikoFunctionChain *next = current->next;
@@ -111,16 +75,80 @@ void SilikoFunctionCallerTearDown(void)
 			}
 		}
 	}
-	memset(functionTable, 0, sizeof(functionTable));
+
+	free(Caller);
 }
 
-static SilikoFunctionPointer GetFunction(const char *name)
+int SilikoFunctionCallerInstall(
+	SilikoFunctionCaller *Caller,
+	const char *name,
+	SilikoFunctionPointer function)
 {
-	int index;
-	SilikoFunctionChain *current;
+	uint8_t bucket = hash(name);
+	SilikoFunctionChain  *newNode;
 
-	index = SilikoHash((const unsigned char *)name, strlen(name));
-	current = functionTable[index];
+	if (!(newNode = malloc(sizeof(SilikoFunctionChain))))
+		return 0;
+
+	newNode->id = strdup(name);
+	newNode->function = function;
+	newNode->next = NULL;
+
+	if (Caller->table[bucket])
+	{
+		SilikoFunctionChain *currentNode = Caller->table[bucket];
+		while (currentNode->next)
+			currentNode = currentNode->next;
+		currentNode->next = newNode;
+	}
+	else
+	{
+		Caller->table[bucket] = newNode;
+	}
+
+	return -1;
+}
+
+int SilikoFunctionCallerInstallOperators(SilikoFunctionCaller *Caller)
+{
+	return SilikoFunctionCallerInstall(Caller, "add", SilikoFunction_add)
+		&& SilikoFunctionCallerInstall(Caller, "subtract", SilikoFunction_subtract)
+		&& SilikoFunctionCallerInstall(Caller, "multiply", SilikoFunction_multiply)
+		&& SilikoFunctionCallerInstall(Caller, "divide", SilikoFunction_divide)
+		&& SilikoFunctionCallerInstall(Caller, "power", SilikoFunction_power)
+		&& SilikoFunctionCallerInstall(Caller, "dice", SilikoFunction_dice);
+}
+
+int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *Caller)
+{
+	return SilikoFunctionCallerInstall(Caller, "abs", SilikoFunction_abs)
+		&& SilikoFunctionCallerInstall(Caller, "acos", SilikoFunction_acos)
+		&& SilikoFunctionCallerInstall(Caller, "asin", SilikoFunction_asin)
+		&& SilikoFunctionCallerInstall(Caller, "atan", SilikoFunction_atan)
+		&& SilikoFunctionCallerInstall(Caller, "ceil", SilikoFunction_ceil)
+		&& SilikoFunctionCallerInstall(Caller, "cos", SilikoFunction_cos)
+		&& SilikoFunctionCallerInstall(Caller, "cosh", SilikoFunction_cosh)
+		&& SilikoFunctionCallerInstall(Caller, "exp", SilikoFunction_exp)
+		&& SilikoFunctionCallerInstall(Caller, "floor", SilikoFunction_floor)
+		&& SilikoFunctionCallerInstall(Caller, "log", SilikoFunction_log)
+		&& SilikoFunctionCallerInstall(Caller, "log10", SilikoFunction_log10)
+		&& SilikoFunctionCallerInstall(Caller, "sin", SilikoFunction_sin)
+		&& SilikoFunctionCallerInstall(Caller, "sinh", SilikoFunction_sinh)
+		&& SilikoFunctionCallerInstall(Caller, "sqrt", SilikoFunction_sqrt)
+		&& SilikoFunctionCallerInstall(Caller, "tan", SilikoFunction_tan)
+		&& SilikoFunctionCallerInstall(Caller, "tanh", SilikoFunction_tanh);
+}
+
+int SilikoFunctionCallerInstallAllFunctions(SilikoFunctionCaller *Caller)
+{
+	return SilikoFunctionCallerInstallOperators(Caller) &
+		SilikoFunctionCallerInstallFunctions(Caller);
+}
+
+static SilikoFunctionPointer GetFunction(SilikoFunctionCaller *Caller, const char *name)
+{
+	uint8_t index = hash(name);
+	SilikoFunctionChain *current = Caller->table[index];
 
 	while (current)
 		if (strcmp(name, current->id) != 0)
@@ -134,12 +162,16 @@ static SilikoFunctionPointer GetFunction(const char *name)
 		return NULL;
 }
 
-SilikoValue SilikoFunctionCallerCall(const char *name, int argc, SilikoValue *argv)
+SilikoValue SilikoFunctionCallerCall(
+	SilikoFunctionCaller *Caller,
+	const char *name,
+	int argc,
+	SilikoValue *argv)
 {
 	SilikoFunctionPointer f;
 	SilikoValue rVal;
 
-	f = GetFunction(name);
+	f = GetFunction(Caller, name);
 
 	if (!f)
 		rVal.Status = SILIKO_VAL_BAD_FUNCTION;
