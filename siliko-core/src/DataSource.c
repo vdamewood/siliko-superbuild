@@ -19,6 +19,14 @@
 
 #include <SilikoCore/DataSource.h>
 
+struct SilikoDataSource
+{
+	void *State;
+	int (*AdvanceFunction)(void *State);
+	char (*GetFunction)(void *State);
+	void (*DeleteFunction)(void *State);
+};
+
 SilikoDataSource *SilikoDataSourceNew(
 	void *NewState,
 	int (*NewAdvanceFunction)(void *),

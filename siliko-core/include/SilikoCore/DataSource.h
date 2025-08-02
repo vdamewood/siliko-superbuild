@@ -24,13 +24,7 @@
 extern "C" {
 #endif
 
-struct SilikoDataSource
-{
-	void *State;
-	int (*AdvanceFunction)(void *State);
-	char (*GetFunction)(void *State);
-	void (*DeleteFunction)(void *State);
-};
+struct SilikoDataSource;
 typedef struct SilikoDataSource SilikoDataSource;
 
 SILIKOCORE_EXPORT SilikoDataSource *SilikoDataSourceNew(
