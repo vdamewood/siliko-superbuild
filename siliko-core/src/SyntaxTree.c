@@ -68,7 +68,31 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void)
 	return rVal;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(struct SilikoValue NewValue)
+{
+	SilikoSyntaxTreeNode *rVal = NULL;
+
+	if ((rVal = malloc(sizeof(SilikoSyntaxTreeNode))))
+	{
+		rVal->Type = SILIKO_AST_LEAF;
+		rVal->Leaf.Status = NewValue.Status;
+		switch (rVal->Leaf.Status)
+		{
+		case SILIKO_VAL_INTEGER:
+			rVal->Leaf.Integer = NewValue.Integer;
+			break;
+		case SILIKO_VAL_FLOAT:
+			rVal->Leaf.Float = NewValue.Float;
+			break;
+		default:
+			rVal->Leaf.Integer = NewValue.Integer;
+			break;
+		}
+	}
+	return rVal;
+}
+
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int NewValue)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
@@ -81,7 +105,7 @@ SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int NewValue)
 	return rVal;
 }
 
-SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double NewValue)
+SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double NewValue)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 

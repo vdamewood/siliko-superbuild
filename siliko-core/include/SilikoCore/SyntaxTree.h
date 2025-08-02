@@ -36,8 +36,9 @@ typedef enum SilikoSyntaxTreeNodeType SilikoSyntaxTreeNodeType;
 struct SilikoSyntaxTreeNode;
 typedef struct SilikoSyntaxTreeNode SilikoSyntaxTreeNode;
 
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewInteger(long long int IntegerValue);
-SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFloat(double FloatValue);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewLeaf(struct SilikoValue);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromInteger(long long int IntegerValue);
+SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewFromFloat(double FloatValue);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewBranch(char *Id);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewError(void);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNode *SilikoSyntaxTreeNewNothing(void);

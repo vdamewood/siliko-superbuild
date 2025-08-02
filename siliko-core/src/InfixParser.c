@@ -282,7 +282,7 @@ static SilikoSyntaxTreeNode *GetExprRollLeftFactor(SilikoLexer *lexer)
 
 		value = SilikoLexerGetToken(lexer).Integer;
 		SilikoLexerNext(lexer);
-		return SilikoSyntaxTreeNewInteger(value);
+		return SilikoSyntaxTreeNewFromInteger(value);
 	}
 	else
 	{
@@ -352,11 +352,11 @@ static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer)
 	switch (SilikoLexerGetToken(lexer).Type)
 	{
 	case SILIKO_TOK_INTEGER:
-		rVal = SilikoSyntaxTreeNewInteger(SilikoLexerGetToken(lexer).Integer);
+		rVal = SilikoSyntaxTreeNewFromInteger(SilikoLexerGetToken(lexer).Integer);
 		SilikoLexerNext(lexer);
 		break;
 	case SILIKO_TOK_FLOAT:
-		rVal = SilikoSyntaxTreeNewFloat(SilikoLexerGetToken(lexer).Float);
+		rVal = SilikoSyntaxTreeNewFromFloat(SilikoLexerGetToken(lexer).Float);
 		SilikoLexerNext(lexer);
 		break;
 	default:
@@ -425,7 +425,7 @@ SilikoSyntaxTreeNode *SilikoParseInfix(SilikoDataSource *Input)
 		return NULL;
 
 	rVal = (SilikoLexerGetToken(lexer).Type == SILIKO_TOK_EOL)
-		? SilikoSyntaxTreeNewInteger(0)
+		? SilikoSyntaxTreeNewFromInteger(0)
 		: GetExprAddSub(lexer);
 
 	if (SilikoLexerGetToken(lexer).Type != SILIKO_TOK_EOL)
