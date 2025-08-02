@@ -42,11 +42,10 @@ enum SilikoTokenType
 	SILIKO_TOK_ID,
 	SILIKO_TOK_EOL
 };
-typedef enum SilikoTokenType SilikoTokenType;
 
 struct SilikoToken
 {
-	SilikoTokenType Type;
+	enum SilikoTokenType Type;
 	union
 	{
 		char *Id;
@@ -54,7 +53,6 @@ struct SilikoToken
 		double Float;
 	};
 };
-typedef struct SilikoToken SilikoToken;
 
 #if defined __cplusplus
 }

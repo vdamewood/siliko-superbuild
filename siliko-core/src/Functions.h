@@ -20,27 +20,27 @@
 
 #include <SilikoCore/Value.h>
 
-SilikoValue SilikoFunction_add(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_subtract(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_multiply(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_divide(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_power(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_dice(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_abs(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_acos(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_asin(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_atan(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_ceil(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_cos(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_cosh(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_exp(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_floor(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_log(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_log10(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_sin(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_sinh(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_sqrt(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_tan(int argc, SilikoValue *argv);
-SilikoValue SilikoFunction_tanh(int argc, SilikoValue *argv);
+struct SilikoValue SilikoFunction_add(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_subtract(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_multiply(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_divide(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_power(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_dice(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_abs(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_acos(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_asin(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_atan(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_ceil(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_cos(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_cosh(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_exp(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_floor(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_log(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_log10(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_sin(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_sinh(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_sqrt(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_tan(int argc, struct SilikoValue *argv);
+struct SilikoValue SilikoFunction_tanh(int argc, struct SilikoValue *argv);
 
 #endif /* SILIKO_FUNCTIONS_H */

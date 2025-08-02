@@ -25,7 +25,7 @@
 struct SilikoLexer
 {
 	SilikoDataSource *Source;
-	SilikoToken Token;
+	struct SilikoToken Token;
 };
 typedef struct SilikoLexer SilikoLexer;
 
@@ -350,7 +350,7 @@ void SilikoLexerDelete(SilikoLexer *Lexer)
 	}
 }
 
-SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer)
+struct SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer)
 {
 	return Lexer->Token;
 }

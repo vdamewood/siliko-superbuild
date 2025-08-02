@@ -43,7 +43,7 @@
 - (IBAction) Calculate:(id)sender
 {
 	SilikoSyntaxTreeNode *Ast;
-	SilikoValue Result;
+	struct SilikoValue Result;
 
 	Ast = SilikoParseInfix(SilikoStringSourceNew([[self.input stringValue] UTF8String]));
 	Result = SilikoSyntaxTreeEvaluate(Ast, self.caller);

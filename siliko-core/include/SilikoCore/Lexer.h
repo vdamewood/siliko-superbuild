@@ -34,7 +34,7 @@ SILIKOCORE_EXPORT void SilikoLexerDelete(SilikoLexer *Lexer);
 
 SILIKOCORE_EXPORT void SilikoLexerNext(SilikoLexer *Lexer);
 
-SILIKOCORE_EXPORT SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer);
+SILIKOCORE_EXPORT struct SilikoToken SilikoLexerGetToken(SilikoLexer *Lexer);
 
 #if defined __cplusplus
 }

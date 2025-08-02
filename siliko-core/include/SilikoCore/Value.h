@@ -44,20 +44,18 @@ enum SilikoValueStatus
 	SILIKO_VAL_RANGE_ERR      /* Error: A function call resulted in a
 				    range error. */
 };
-typedef enum SilikoValueStatus SilikoValueStatus;
 
 struct SilikoValue
 {
-	SilikoValueStatus Status;
+	enum SilikoValueStatus Status;
 	union
 	{
 		long long int Integer;
 		double Float;
 	};
 };
-typedef struct SilikoValue SilikoValue;
 
-SILIKOCORE_EXPORT char *SilikoValueToString(SilikoValue InputValue);
+SILIKOCORE_EXPORT char *SilikoValueToString(struct SilikoValue InputValue);
 SILIKOCORE_EXPORT void SilikoValueDeleteString(char *string);
 
 #if defined __cplusplus

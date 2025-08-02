@@ -40,7 +40,7 @@ struct SilikoSyntaxTreeNode
 	SilikoSyntaxTreeNodeType Type;
 	union
 	{
-		SilikoValue Leaf;
+		struct SilikoValue Leaf;
 		SilikoSyntaxTreeBranch *Branch;
 	};
 };
@@ -271,20 +271,20 @@ void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *Node)
 	free(Node);
 }
 
-static int IsNumber(SilikoValue n)
+static int IsNumber(struct SilikoValue n)
 {
 	return n.Status == SILIKO_VAL_INTEGER || n.Status == SILIKO_VAL_FLOAT;
 }
 
-static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunctionCaller *Caller)
+static struct SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunctionCaller *Caller)
 {
-	SilikoValue rVal;
-	SilikoValue *Arguments = NULL;
+	struct SilikoValue rVal;
+	struct SilikoValue *Arguments = NULL;
 
 	if (Branch->Count)
 	{
 		if (!(Arguments =
-			calloc(Branch->Count, sizeof(SilikoValue))))
+			calloc(Branch->Count, sizeof(struct SilikoValue))))
 		{
 			rVal.Status = SILIKO_VAL_MEMORY_ERR;
 			return rVal;
@@ -316,9 +316,9 @@ static SilikoValue EvaluateBranch(SilikoSyntaxTreeBranch *Branch, SilikoFunction
 	return rVal;
 }
 
-SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunctionCaller *Caller)
+struct SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *Node, SilikoFunctionCaller *Caller)
 {
-	SilikoValue rVal;
+	struct SilikoValue rVal;
 
 	if (!Node)
 	{

@@ -114,7 +114,7 @@ void OnCalculate(HWND hwnd)
 	int ExpressionSize;
 	char *tmpString;
 	SilikoSyntaxTreeNode *Node;
-	SilikoValue Value;
+	struct SilikoValue Value;
 
 	SilikoFunctionCaller *caller = GetProp(hwnd, "Caller");
 

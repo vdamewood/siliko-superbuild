@@ -38,7 +38,7 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 		gtk_editable_get_text(
 		GTK_EDITABLE(
 		gtk_builder_get_object(GTK_BUILDER(EvalWindow), "Input")))));
-	SilikoValue Value = SilikoSyntaxTreeEvaluate(ResultTree, caller);
+	struct SilikoValue Value = SilikoSyntaxTreeEvaluate(ResultTree, caller);
 	SilikoSyntaxTreeDelete(ResultTree);
 
 	char *ResultString = SilikoValueToString(Value);

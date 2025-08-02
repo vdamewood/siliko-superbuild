@@ -37,7 +37,6 @@ struct SilikoFunctionChain
 	SilikoFunctionPointer function;
 	struct SilikoFunctionChain *next;
 };
-typedef struct SilikoFunctionChain SilikoFunctionChain;
 
 #define TableSize 127
 
@@ -51,7 +50,7 @@ static uint8_t hash(const char *input)
 
 struct SilikoFunctionCaller
 {
-	SilikoFunctionChain *table[TableSize];
+	struct SilikoFunctionChain *table[TableSize];
 };
 
 SilikoFunctionCaller *SilikoFunctionCallerNew()
@@ -65,10 +64,10 @@ void SilikoFunctionCallerDelete(SilikoFunctionCaller *Caller)
 	{
 		if (Caller->table[i])
 		{
-			SilikoFunctionChain *current = Caller->table[i];
+			struct SilikoFunctionChain *current = Caller->table[i];
 			while (current)
 			{
-				SilikoFunctionChain *next = current->next;
+				struct SilikoFunctionChain *next = current->next;
 				free(current->id);
 				free(current);
 				current = next;
@@ -85,9 +84,9 @@ int SilikoFunctionCallerInstall(
 	SilikoFunctionPointer function)
 {
 	uint8_t bucket = hash(name);
-	SilikoFunctionChain  *newNode;
+	struct SilikoFunctionChain  *newNode;
 
-	if (!(newNode = malloc(sizeof(SilikoFunctionChain))))
+	if (!(newNode = malloc(sizeof(struct SilikoFunctionChain))))
 		return 0;
 
 	newNode->id = strdup(name);
@@ -96,7 +95,7 @@ int SilikoFunctionCallerInstall(
 
 	if (Caller->table[bucket])
 	{
-		SilikoFunctionChain *currentNode = Caller->table[bucket];
+		struct SilikoFunctionChain *currentNode = Caller->table[bucket];
 		while (currentNode->next)
 			currentNode = currentNode->next;
 		currentNode->next = newNode;
@@ -148,7 +147,7 @@ int SilikoFunctionCallerInstallAllFunctions(SilikoFunctionCaller *Caller)
 static SilikoFunctionPointer GetFunction(SilikoFunctionCaller *Caller, const char *name)
 {
 	uint8_t index = hash(name);
-	SilikoFunctionChain *current = Caller->table[index];
+	struct SilikoFunctionChain *current = Caller->table[index];
 
 	while (current)
 		if (strcmp(name, current->id) != 0)
@@ -162,14 +161,14 @@ static SilikoFunctionPointer GetFunction(SilikoFunctionCaller *Caller, const cha
 		return NULL;
 }
 
-SilikoValue SilikoFunctionCallerCall(
+struct SilikoValue SilikoFunctionCallerCall(
 	SilikoFunctionCaller *Caller,
 	const char *name,
 	int argc,
-	SilikoValue *argv)
+	struct SilikoValue *argv)
 {
 	SilikoFunctionPointer f;
-	SilikoValue rVal;
+	struct SilikoValue rVal;
 
 	f = GetFunction(Caller, name);
 

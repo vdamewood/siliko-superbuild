@@ -46,7 +46,7 @@ SILIKOCORE_EXPORT void SilikoSyntaxTreeDelete(SilikoSyntaxTreeNode *SyntaxTree);
 SILIKOCORE_EXPORT SilikoSyntaxTreeNodeType SilikoSyntaxTreeGetType(SilikoSyntaxTreeNode *SyntaxTree);
 SILIKOCORE_EXPORT int SilikoSyntaxTreeIsError(SilikoSyntaxTreeNode *SyntaxTree);
 
-SILIKOCORE_EXPORT SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree, SilikoFunctionCaller *Caller);
+SILIKOCORE_EXPORT struct SilikoValue SilikoSyntaxTreeEvaluate(SilikoSyntaxTreeNode *SyntaxTree, SilikoFunctionCaller *Caller);
 SILIKOCORE_EXPORT int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
 
 SILIKOCORE_EXPORT int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);

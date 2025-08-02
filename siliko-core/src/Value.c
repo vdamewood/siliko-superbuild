@@ -29,7 +29,7 @@
 #define strdup _strdup
 #endif
 
-char *SilikoValueToString(SilikoValue InputValue)
+char *SilikoValueToString(struct SilikoValue InputValue)
 {
 	size_t size;
 	char * rValue;
