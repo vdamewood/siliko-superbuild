@@ -49,9 +49,37 @@
 	Result = SilikoSyntaxTreeEvaluate(Ast, self.caller);
 	SilikoSyntaxTreeDelete(Ast);
 
-	char *ResultCString = SilikoValueToString(Result);
-	NSString *ResultString = [[NSString alloc] initWithUTF8String: ResultCString];
-	free(ResultCString);
-	[self.output setStringValue: ResultString];
+	switch (Result.Status)
+	{
+	case (SILIKO_VAL_INTEGER):
+		[self.output setIntegerValue: Result.Integer];
+		break;
+	case (SILIKO_VAL_FLOAT):
+		[self.output setDoubleValue: Result.Float];
+		break;
+	case(SILIKO_VAL_MEMORY_ERR):
+		[self.output setStringValue: @"Out of memory"];
+		break;
+	case SILIKO_VAL_SYNTAX_ERR:
+		[self.output setStringValue: @"Syntax error"];
+		break;
+	case SILIKO_VAL_ZERO_DIV_ERR:
+		[self.output setStringValue: @"Division by zero"];
+		break;
+	case SILIKO_VAL_BAD_FUNCTION:
+		[self.output setStringValue: @"Function not found"];
+		break;
+	case SILIKO_VAL_BAD_ARGUMENTS:
+		[self.output setStringValue: @"Bad argument count"];
+		break;
+	case SILIKO_VAL_DOMAIN_ERR:
+		[self.output setStringValue: @"Domain error"];
+		break;
+	case SILIKO_VAL_RANGE_ERR:
+		[self.output setStringValue: @"Range error"];
+		break;
+	default:
+		[self.output setStringValue: @"Unexpected error"];
+	}
 }
 @end

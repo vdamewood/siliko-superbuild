@@ -77,18 +77,47 @@ int main(int argc, char *argv[])
 			add_history(expression);
 
 		free(old_expression);
-		old_expression = NULL;
+		old_expression = expression;
 
 		SilikoSyntaxTreeNode *tree = SilikoParseInfix(
 			SilikoStringSourceNew(expression));
 		struct SilikoValue value = SilikoSyntaxTreeEvaluate(tree, caller);
 		SilikoSyntaxTreeDelete(tree);
 
-		char *ResultString = SilikoValueToString(value);
-		printf("%s\n", ResultString);
-		SilikoValueDeleteString(ResultString);
+		switch (value.Status)
+		{
+		case (SILIKO_VAL_INTEGER):
+			printf("%lli\n", value.Integer);
+			break;
+		case (SILIKO_VAL_FLOAT):
+			printf("%f\n", value.Float);
+			break;
+		case(SILIKO_VAL_MEMORY_ERR):
+			puts("Out of memory");
+			break;
+		case SILIKO_VAL_SYNTAX_ERR:
+			puts("Syntax error.");
+			break;
+		case SILIKO_VAL_ZERO_DIV_ERR:
+			puts("Division by zero");
+			break;
+		case SILIKO_VAL_BAD_FUNCTION:
+			puts("Function not found");
+			break;
+		case SILIKO_VAL_BAD_ARGUMENTS:
+			puts("Bad argument count");
+			break;
+		case SILIKO_VAL_DOMAIN_ERR:
+			puts("Domain error");
+			break;
+		case SILIKO_VAL_RANGE_ERR:
+			puts("Range error");
+			break;
+		default:
+			puts("Unexpected error");
+		}
 
-		old_expression = expression;
+		
 	}
 
 	SilikoFunctionCallerDelete(caller);

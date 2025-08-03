@@ -41,13 +41,46 @@ static void Calculate(GtkWidget *Widget, gpointer EvalWindow)
 	struct SilikoValue Value = SilikoSyntaxTreeEvaluate(ResultTree, caller);
 	SilikoSyntaxTreeDelete(ResultTree);
 
-	char *ResultString = SilikoValueToString(Value);
+	gchar *ResultString = NULL;
+	switch (Value.Status)
+	{
+	case (SILIKO_VAL_INTEGER):
+		ResultString = g_strdup_printf("%lli", Value.Integer);
+		break;
+	case (SILIKO_VAL_FLOAT):
+		ResultString = g_strdup_printf("%f", Value.Float);
+		break;
+	case(SILIKO_VAL_MEMORY_ERR):
+		ResultString = g_strdup("Memory error");
+		break;
+	case SILIKO_VAL_SYNTAX_ERR:
+		ResultString = g_strdup("Syntax error");
+		break;
+	case SILIKO_VAL_ZERO_DIV_ERR:
+		ResultString = g_strdup("Division by zero");
+		break;
+	case SILIKO_VAL_BAD_FUNCTION:
+		ResultString = g_strdup("Function not found");
+		break;
+	case SILIKO_VAL_BAD_ARGUMENTS:
+		ResultString = g_strdup("Bad argument count");
+		break;
+	case SILIKO_VAL_DOMAIN_ERR:
+		ResultString = g_strdup("Domain error");
+		break;
+	case SILIKO_VAL_RANGE_ERR:
+		ResultString = g_strdup("Range error");
+		break;
+	default:
+		ResultString = g_strdup("Unexpected error");
+	}
+
 	gtk_label_set_text(
 		GTK_LABEL(
 			gtk_builder_get_object(
 			GTK_BUILDER(EvalWindow), "Output")),
 		ResultString);
-	free(ResultString);
+	g_free(ResultString);
 }
 
 static gboolean Cleanup(GtkWidget *Widget, gpointer EvalWindow)

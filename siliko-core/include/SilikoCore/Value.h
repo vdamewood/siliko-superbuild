@@ -55,9 +55,6 @@ struct SilikoValue
 	};
 };
 
-SILIKOCORE_EXPORT char *SilikoValueToString(struct SilikoValue InputValue);
-SILIKOCORE_EXPORT void SilikoValueDeleteString(char *string);
-
 #if defined __cplusplus
 }
 #endif

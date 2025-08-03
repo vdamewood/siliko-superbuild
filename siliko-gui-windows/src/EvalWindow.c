@@ -128,7 +128,41 @@ void OnCalculate(HWND hwnd)
 	Value = SilikoSyntaxTreeEvaluate(Node, caller);
 	free(Node);
 
-	tmpString = SilikoValueToString(Value);
+	size_t size = 0;
+	switch (Value.Status)
+	{
+	case (SILIKO_VAL_INTEGER):
+		size = snprintf(NULL, 0, "%lli", Value.Integer) + 1;
+		tmpString = malloc(size);
+		snprintf(tmpString, size, "%lli", Value.Integer);
+		break;
+	case (SILIKO_VAL_FLOAT):
+		size = snprintf(NULL, 0, "%f", Value.Float + 1);
+		tmpString = malloc(size);
+		snprintf(tmpString, size, "%f", Value.Float);
+		break;
+	case(SILIKO_VAL_MEMORY_ERR):
+		tmpString = strdup("Error: Out of memory");
+		break;
+	case SILIKO_VAL_SYNTAX_ERR:
+		tmpString = strdup("Error: Syntax error");
+		break;
+	case SILIKO_VAL_ZERO_DIV_ERR:
+		tmpString = strdup("Error: Division by zero");
+		break;
+	case SILIKO_VAL_BAD_FUNCTION:
+		tmpString = strdup("Error: Function not found");
+		break;
+	case SILIKO_VAL_BAD_ARGUMENTS:
+		tmpString = strdup("Error: Bad argument count");
+		break;
+	case SILIKO_VAL_DOMAIN_ERR:
+		tmpString = strdup("Error: Domain error");
+		break;
+	case SILIKO_VAL_RANGE_ERR:
+		tmpString = strdup("Error: Range error");
+	}
+
 	SetDlgItemText(hwnd, CALCULATOR_OUTPUT, tmpString);
 	free(tmpString);
 }
