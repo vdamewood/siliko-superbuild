@@ -172,8 +172,8 @@ install(FILES
 )
 
 install(FILES
-		"${PROJECT_SOURCE_DIR}/License.txt"
-		"${PROJECT_SOURCE_DIR}/License.Gpl.txt"
+		"${PROJECT_SOURCE_DIR}/License.md"
+		"${PROJECT_SOURCE_DIR}/License.Gpl.md"
 	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore"
 	COMPONENT "${RUNTIME_COMPONENT}"
 )
