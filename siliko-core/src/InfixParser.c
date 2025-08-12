@@ -26,13 +26,13 @@ static SilikoSyntaxTreeNode *GetExpressionRest(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetTerm(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetTermRest(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetExponent(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetExponentLeftFactor(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetExponentRest(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetRoll(SilikoLexer *lexe);
-static SilikoSyntaxTreeNode *GetRollLeftFactor(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetRollRest(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer);
 static SilikoSyntaxTreeNode *GetNumber(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer);
-static SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetUnsignedNumber(SilikoLexer *lexer);
+static SilikoSyntaxTreeNode *GetFunctionCall(SilikoLexer *lexer);
 static void GetArguments(SilikoLexer *lexer, SilikoSyntaxTreeNode *rVal);
 
 static SilikoSyntaxTreeNode *GetExpression(SilikoLexer *lexer)
@@ -188,7 +188,7 @@ static SilikoSyntaxTreeNode *GetExponent(SilikoLexer *lexer)
 	if (!(leftValue = GetRoll(lexer)))
 		return NULL;
 
-	if (!(rest = GetExponentLeftFactor(lexer)))
+	if (!(rest = GetExponentRest(lexer)))
 	{
 		SilikoSyntaxTreeDelete(leftValue);
 		return NULL;
@@ -212,7 +212,7 @@ static SilikoSyntaxTreeNode *GetExponent(SilikoLexer *lexer)
 	return rVal;
 }
 
-static SilikoSyntaxTreeNode *GetExponentLeftFactor(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetExponentRest(SilikoLexer *lexer)
 {
 	if (SilikoLexerGetToken(lexer).Type == '^')
 	{
@@ -245,7 +245,7 @@ static SilikoSyntaxTreeNode *GetRoll(SilikoLexer *lexer)
 	if (!(leftValue = GetAtom(lexer)))
 		return NULL;
 
-	if (!(rest = GetRollLeftFactor(lexer)))
+	if (!(rest = GetRollRest(lexer)))
 	{
 		SilikoSyntaxTreeDelete(leftValue);
 		return NULL;
@@ -270,7 +270,7 @@ static SilikoSyntaxTreeNode *GetRoll(SilikoLexer *lexer)
 	return rVal;
 }
 
-static SilikoSyntaxTreeNode *GetRollLeftFactor(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetRollRest(SilikoLexer *lexer)
 {
 	long long int value;
 
@@ -313,7 +313,7 @@ static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer)
 		SilikoLexerNext(lexer);
 		return value;
 	case SILIKO_TOK_ID:
-		return GetFCall(lexer);
+		return GetFunctionCall(lexer);
 	default:
 		return SilikoSyntaxTreeNewError();
 	}
@@ -321,31 +321,31 @@ static SilikoSyntaxTreeNode *GetAtom(SilikoLexer *lexer)
 
 static SilikoSyntaxTreeNode *GetNumber(SilikoLexer *lexer)
 {
-	SilikoSyntaxTreeNode * uNumber = NULL;
+	SilikoSyntaxTreeNode * UnsignedNumber = NULL;
 
 	switch (SilikoLexerGetToken(lexer).Type)
 	{
 	case SILIKO_TOK_INTEGER:
 	case SILIKO_TOK_FLOAT:
-		return GetUNumber(lexer);
+		return GetUnsignedNumber(lexer);
 	case '-':
 		SilikoLexerNext(lexer);
-		if (!(uNumber = GetUNumber(lexer)))
+		if (!(UnsignedNumber = GetUnsignedNumber(lexer)))
 			return NULL;
 
-		if (!SilikoSyntaxTreeNegate(uNumber))
+		if (!SilikoSyntaxTreeNegate(UnsignedNumber))
 		{
-			SilikoSyntaxTreeDelete(uNumber);
+			SilikoSyntaxTreeDelete(UnsignedNumber);
 			return SilikoSyntaxTreeNewError();
 		}
 
-		return uNumber;
+		return UnsignedNumber;
 	default:
 		return SilikoSyntaxTreeNewError();
 	}
 }
 
-static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetUnsignedNumber(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
@@ -366,7 +366,7 @@ static SilikoSyntaxTreeNode *GetUNumber(SilikoLexer *lexer)
 	return rVal;
 }
 
-SilikoSyntaxTreeNode *GetFCall(SilikoLexer *lexer)
+static SilikoSyntaxTreeNode *GetFunctionCall(SilikoLexer *lexer)
 {
 	SilikoSyntaxTreeNode *rVal = NULL;
 
