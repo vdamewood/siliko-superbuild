@@ -186,21 +186,21 @@ LRESULT CALLBACK EvalWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
-        case WM_COMMAND:
-        	switch(LOWORD(wParam))
-        	{
-			case CALCULATOR_BUTTON:
-				OnCalculate(hwnd);
-				return 0;
-			case HELP_ABOUT:
-				DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(ABOUT_DIALOG), hwnd, (DLGPROC)AboutDialogProc);
-				return 0;
-			case CALCULATOR_EXIT:
-				PostMessage(hwnd, WM_CLOSE, 0, 0);
-				return 0;
-			default:
-				return 0;
-			}
+	case WM_COMMAND:
+		switch(LOWORD(wParam))
+		{
+		case CALCULATOR_BUTTON:
+			OnCalculate(hwnd);
+			return 0;
+		case HELP_ABOUT:
+			DialogBox(GetModuleHandle(NULL), MAKEINTRESOURCE(ABOUT_DIALOG), hwnd, (DLGPROC)AboutDialogProc);
+			return 0;
+		case CALCULATOR_EXIT:
+			PostMessage(hwnd, WM_CLOSE, 0, 0);
+			return 0;
+		default:
+			return 0;
+		}
 	default:
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
