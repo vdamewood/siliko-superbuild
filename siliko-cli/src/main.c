@@ -116,8 +116,6 @@ int main(int argc, char *argv[])
 		default:
 			puts("Unexpected error");
 		}
-
-		
 	}
 
 	SilikoFunctionCallerDelete(caller);
