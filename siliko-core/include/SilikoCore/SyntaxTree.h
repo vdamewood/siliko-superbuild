@@ -52,8 +52,6 @@ SILIKOCORE_EXPORT int SilikoSyntaxTreeNegate(SilikoSyntaxTreeNode *SyntaxTree);
 
 SILIKOCORE_EXPORT int SilikoSyntaxTreePushLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
 SILIKOCORE_EXPORT int SilikoSyntaxTreePushRight(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
-SILIKOCORE_EXPORT int SilikoSyntaxTreeGraftLeft(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
-SILIKOCORE_EXPORT int SilikoSyntaxTreeGraftRight(SilikoSyntaxTreeNode *BaseTree, SilikoSyntaxTreeNode *NewBranch);
 
 #if defined __cplusplus
 }

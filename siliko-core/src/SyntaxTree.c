@@ -191,57 +191,6 @@ int SilikoSyntaxTreePushRight(SilikoSyntaxTreeNode *Tree, SilikoSyntaxTreeNode *
 	return -1;
 }
 
-int SilikoSyntaxTreeGraftLeft(SilikoSyntaxTreeNode *Tree, SilikoSyntaxTreeNode *NewBranch)
-{
-	if (Tree->Type == SILIKO_AST_BRANCH)
-	{
-		if (Tree->Branch->Count == 0)
-		{
-			return 0;
-		}
-		else if (Tree->Branch->Children[0] == NULL)
-		{
-			Tree->Branch->Children[0] = NewBranch;
-			return -1;
-		}
-		else
-		{
-			return SilikoSyntaxTreeGraftLeft
-				(Tree->Branch->Children[0], NewBranch);
-		}
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-int SilikoSyntaxTreeGraftRight(SilikoSyntaxTreeNode *Tree, SilikoSyntaxTreeNode *NewBranch)
-{
-	if (Tree->Type == SILIKO_AST_BRANCH)
-	{
-		if (Tree->Branch->Count == 0)
-		{
-			return 0;
-		}
-		else if (Tree->Branch->Children[Tree->Branch->Count - 1] == NULL)
-		{
-			Tree->Branch->Children[Tree->Branch->Count - 1] = NewBranch;
-			return -1;
-		}
-		else
-		{
-			return SilikoSyntaxTreeGraftRight(
-				Tree->Branch->Children[Tree->Branch->Count - 1],
-				NewBranch);
-		}
-	}
-	else
-	{
-		return 0;
-	}
-}
-
 SilikoSyntaxTreeNodeType SilikoSyntaxTreeGetType(SilikoSyntaxTreeNode *SyntaxTree)
 {
 	return SyntaxTree->Type;
