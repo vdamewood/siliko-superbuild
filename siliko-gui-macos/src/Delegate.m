@@ -27,7 +27,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	self.caller = SilikoFunctionCallerNew();
-	SilikoFunctionCallerInstallAllFunctions(self.caller);
+	SilikoFunctionCallerInstallOperators(self.caller);
+	SilikoFunctionCallerInstallFunctions(self.caller);
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication

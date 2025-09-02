@@ -74,7 +74,8 @@ void OnCreate(HWND Handle)
 		Handle, (HMENU)CALCULATOR_BUTTON,
 		GetModuleHandle(NULL), NULL);
 	SilikoFunctionCaller *caller = SilikoFunctionCallerNew();
-	SilikoFunctionCallerInstallAllFunctions(caller);
+	SilikoFunctionCallerInstallOperators(caller);
+	SilikoFunctionCallerInstallFunctions(caller);
 	SetProp(Handle, "Caller", caller);
 }
 

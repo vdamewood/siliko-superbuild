@@ -97,7 +97,8 @@ GtkBuilder *EvalWindowNewBuilder(void)
 	GtkBuilder *EvalWindow = gtk_builder_new_from_resource(GladeFile);
 
 	SilikoFunctionCaller *caller = SilikoFunctionCallerNew();
-	SilikoFunctionCallerInstallAllFunctions(caller);
+	SilikoFunctionCallerInstallOperators(caller);
+	SilikoFunctionCallerInstallFunctions(caller);
 	g_object_set_data(
 		G_OBJECT(EvalWindow),
 		"Caller",

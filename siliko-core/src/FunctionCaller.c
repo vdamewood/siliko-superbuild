@@ -138,12 +138,6 @@ int SilikoFunctionCallerInstallFunctions(SilikoFunctionCaller *Caller)
 		&& SilikoFunctionCallerInstall(Caller, "tanh", SilikoFunction_tanh);
 }
 
-int SilikoFunctionCallerInstallAllFunctions(SilikoFunctionCaller *Caller)
-{
-	return SilikoFunctionCallerInstallOperators(Caller) &
-		SilikoFunctionCallerInstallFunctions(Caller);
-}
-
 static SilikoFunctionPointer GetFunction(SilikoFunctionCaller *Caller, const char *name)
 {
 	uint8_t index = hash(name);

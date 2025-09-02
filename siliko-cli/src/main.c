@@ -57,7 +57,8 @@ int main(int argc, char *argv[])
 	}
 
 	SilikoFunctionCaller *caller = SilikoFunctionCallerNew();
-	SilikoFunctionCallerInstallAllFunctions(caller);
+	SilikoFunctionCallerInstallOperators(caller);
+	SilikoFunctionCallerInstallFunctions(caller);
 
 	char *expression = NULL;
 	char *old_expression = NULL;
