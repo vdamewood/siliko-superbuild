@@ -22,7 +22,31 @@ project(SilikoCore
 	HOMEPAGE_URL  "https://vdamewood.com/software/projects/siliko"
 	LANGUAGES     C
 )
-set(PRERELEASE_SUFFIX "indev")
+
+# These are specific to this project, and are not a standard practice.
+# These values are appended to the version number in the
+# versioning API and used by the version resource file for Windows
+# binaries. They are set here to keep version information in as close to
+# one location as possible.
+
+# SILIKO_CORE_PRERELEASE_SUFFIX is set by project maintainers.
+# SILIKO_CORE_PACKAGE_SUFFIX is set by package maintainers at
+#  packaging time.
+
+# Values for SILIKO_CORE_PRERELEASE_SUFFIX:
+# "indev" is used for SCM commits that aren't releases of any sort.
+# "beta." followed by an unsigned integer (eg "beta.2") is used for beta
+#     releases.
+# "rc." followed by an unsigned integer (eg "rc.1") is used for release
+#     candidates
+# The empty string ("") is used for full releases.
+set(SILIKO_CORE_PRERELEASE_SUFFIX "indev" CACHE INTERNAL
+	"Suffix to append to prerelease versions")
+
+# Follow your package repository's guidelines when setting this value.
+set(SILIKO_CORE_PACKAGE_SUFFIX "" CACHE STRING
+	"Suffix to append to packaged versions by package maintainers"
+)
 
 include(GNUInstallDirs)
 
@@ -94,7 +118,7 @@ set_target_properties(SilikoCore PROPERTIES
 )
 
 if(WIN32)
-	if(PRERELEASE_SUFFIX STREQUAL "")
+	if(SILIKO_CORE_PRERELEASE_SUFFIX STREQUAL "")
 		set(VSV_PRERELEASE_FLAG 0)
 	else()
 		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
