@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.30)
 
 project(SilikoCore
 	VERSION       0.0.0
@@ -51,20 +51,23 @@ find_library(LIBM m)
 
 add_library(SilikoCore)
 add_library(Siliko::SilikoCore ALIAS SilikoCore)
-set(PUBLIC_HEADERS
-	include/SilikoCore/Value.h
-	include/SilikoCore/FunctionCaller.h
-	include/SilikoCore/SyntaxTree.h
-	include/SilikoCore/DataSource.h
-	include/SilikoCore/StringSource.h
-	include/SilikoCore/Token.h
-	include/SilikoCore/Lexer.h
-	include/SilikoCore/InfixParser.h
-	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
-)
 target_sources(SilikoCore
+	PUBLIC
+		FILE_SET HEADERS
+		BASE_DIRS
+			include
+			${CMAKE_CURRENT_BINARY_DIR}/include
+		FILES
+			include/SilikoCore/Value.h
+			include/SilikoCore/FunctionCaller.h
+			include/SilikoCore/SyntaxTree.h
+			include/SilikoCore/DataSource.h
+			include/SilikoCore/StringSource.h
+			include/SilikoCore/Token.h
+			include/SilikoCore/Lexer.h
+			include/SilikoCore/InfixParser.h
+			${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 	PRIVATE
-		${PUBLIC_HEADERS}
 		src/Functions.h
 		src/Functions.c
 		src/FunctionCaller.c
@@ -77,17 +80,9 @@ target_sources(SilikoCore
 if(LIBM)
 	target_link_libraries(SilikoCore PRIVATE m)
 endif()
-target_include_directories(SilikoCore
-	PUBLIC
-		"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
-		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-)
-if (NOT SILIKO_CORE_BUILD_FRAMEWORK)
-	target_include_directories(SilikoCore
-	INTERFACE
-		$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-endif()
+
 target_compile_features(SilikoCore PRIVATE c_std_11)
+get_target_property(PUBLIC_HEADERS SilikoCore HEADER_SET_HEADERS)
 set_target_properties(SilikoCore PROPERTIES
 	PUBLIC_HEADER             "${PUBLIC_HEADERS}"
 	C_VISIBILITY_PRESET       hidden
@@ -97,6 +92,7 @@ set_target_properties(SilikoCore PROPERTIES
 	VERSION                   ${PROJECT_VERSION}
 	SOVERSION                 ${PROJECT_VERSION_MAJOR}
 )
+
 if(WIN32)
 	if(PRERELEASE_SUFFIX STREQUAL "")
 		set(VSV_PRERELEASE_FLAG 0)
@@ -150,7 +146,7 @@ LIBRARY
 FRAMEWORK
 	DESTINATION           "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
-PUBLIC_HEADER
+FILE_SET HEADERS
 	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}/SilikoCore"
 	COMPONENT             "${DEVELOPMENT_COMPONENT}"
 )
