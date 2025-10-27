@@ -23,29 +23,18 @@ project(SilikoCore
 	LANGUAGES     C
 )
 
-# These are specific to this project, and are not a standard practice.
-# These values are appended to the version number in the
-# versioning API and used by the version resource file for Windows
-# binaries. They are set here to keep version information in as close to
-# one location as possible.
-
-# SILIKO_CORE_PRERELEASE_SUFFIX is set by project maintainers.
-# SILIKO_CORE_PACKAGE_SUFFIX is set by package maintainers at
-#  packaging time.
-
-# Values for SILIKO_CORE_PRERELEASE_SUFFIX:
-# "indev" is used for SCM commits that aren't releases of any sort.
-# "beta." followed by an unsigned integer (eg "beta.2") is used for beta
-#     releases.
-# "rc." followed by an unsigned integer (eg "rc.1") is used for release
-#     candidates
-# The empty string ("") is used for full releases.
-set(SILIKO_CORE_PRERELEASE_SUFFIX "indev" CACHE INTERNAL
-	"Suffix to append to prerelease versions")
+set(SILIKO_CORE_COPYRIGHT "Copyright 2012-2025 Vincent Damewood")
+#[=[
+* `indev`: SCM commits
+* `beta.<uint>` (eg "beta.2") beta test releases
+* "rc.<uint>" (eg "rc.1") release candidates
+* "": official releases
+#]=]
+set(SILIKO_CORE_PRERELEASE_SUFFIX "indev")
 
 # Follow your package repository's guidelines when setting this value.
 set(SILIKO_CORE_PACKAGE_SUFFIX "" CACHE STRING
-	"Suffix to append to packaged versions by package maintainers"
+	"Suffix to append to packaged versions of the Siliko Core library by package maintainers"
 )
 
 include(GNUInstallDirs)
@@ -90,6 +79,7 @@ target_sources(SilikoCore
 			include/SilikoCore/Token.h
 			include/SilikoCore/Lexer.h
 			include/SilikoCore/InfixParser.h
+			include/SilikoCore/Version.h
 			${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 	PRIVATE
 		src/Functions.h
@@ -117,30 +107,37 @@ set_target_properties(SilikoCore PROPERTIES
 	SOVERSION                 ${PROJECT_VERSION_MAJOR}
 )
 
+configure_file(
+	src/version.c.in
+	${CMAKE_CURRENT_BINARY_DIR}/version.c
+	@ONLY
+)
+target_sources(SilikoCore
+	PRIVATE
+		${CMAKE_CURRENT_BINARY_DIR}/version.c
+)
+
 if(WIN32)
 	if(SILIKO_CORE_PRERELEASE_SUFFIX STREQUAL "")
-		set(VSV_PRERELEASE_FLAG 0)
+		set(PRERELEASE_FLAG 0)
 	else()
-		set(VSV_PRERELEASE_FLAG VS_FF_PRERELEASE)
+		set(PRERELEASE_FLAG VS_FF_PRERELEASE)
 	endif()
 
-	set(VSV_DEBUG_FLAG 0)
-	set(VSV_FILENAME "SilikoCore.dll")
 	configure_file(
 		src/version.rc.in
-		${CMAKE_CURRENT_BINARY_DIR}/version-release.rc
+		${CMAKE_CURRENT_BINARY_DIR}/version.rc
 		@ONLY
   	)
-	target_sources(SilikoCore PRIVATE $<$<CONFIG:Release>:${CMAKE_CURRENT_BINARY_DIR}/version-release.rc>)
 
-	set(VSV_DEBUG_FLAG VS_FF_DEBUG)
-	set(VSV_FILENAME "SilikoCore.dll")
-	configure_file(
-		src/version.rc.in
-		${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc
-		@ONLY
-  	)
-	target_sources(SilikoCore PRIVATE $<$<CONFIG:Debug>:${CMAKE_CURRENT_BINARY_DIR}/version-debug.rc>)
+	target_compile_definitions(SilikoCore
+		PRIVATE
+			"SILIKO_CORE_ORIGINAL_FILENAME=\"$<TARGET_FILE_NAME:SilikoCore>\""
+	)
+	target_sources(SilikoCore
+		PRIVATE
+			"${CMAKE_CURRENT_BINARY_DIR}/version.rc"
+	)
 endif()
 
 include(GenerateExportHeader)

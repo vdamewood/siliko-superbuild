@@ -1,4 +1,4 @@
-/* Version.rc.in: Version information for Win32
+/* Version.rc.in: Version information for Windows
  * Copyright 2012-2025 Vincent Damewood
  *
  * This library is free software: you can redistribute it and/or modify
@@ -17,13 +17,25 @@
 
 #include <Winver.h>
 
+#ifndef _DEBUG
+#define DEBUG_FLAG 0
+#else
+#define DEBUG_FLAG VS_FF_DEBUG
+#endif
+
+#if defined SilikoCore_EXPORTS
+#define LIB_TYPE VFT_DLL
+#else
+#define LIB_TYPE VFT_STATIC_LIB
+#endif
+
 VS_VERSION_INFO  VERSIONINFO
-FILEVERSION      @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
-PRODUCTVERSION   @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+FILEVERSION      @SilikoCore_VERSION_MAJOR@,@SilikoCore_VERSION_MINOR@,@SilikoCore_VERSION_PATCH@,0
+PRODUCTVERSION   @SilikoCore_VERSION_MAJOR@,@SilikoCore_VERSION_MINOR@,@SilikoCore_VERSION_PATCH@,0
 FILEFLAGSMASK    VS_FFI_FILEFLAGSMASK
-FILEFLAGS        (@VSV_DEBUG_FLAG@|@VSV_PRERELEASE_FLAG@)
+FILEFLAGS        (DEBUG_FLAG|@PRERELEASE_FLAG@)
 FILEOS           VOS__WINDOWS32
-FILETYPE         VFT_DLL
+FILETYPE         LIB_TYPE
 FILESUBTYPE      VFT2_UNKNOWN
 BEGIN
     BLOCK "StringFileInfo"
@@ -31,13 +43,13 @@ BEGIN
         BLOCK "040904E4"
         BEGIN
             VALUE "CompanyName",      "No Company"
-            VALUE "FileDescription",  "@PROJECT_DESCRIPTION@"
-            VALUE "FileVersion",      "@PROJECT_VERSION@"
-            VALUE "InternalName",     "@PROJECT_NAME@"
-            VALUE "LegalCopyright",   "@SILIKO_COPYRIGHT@"
-            VALUE "OriginalFilename", "@VSV_FILENAME@"
-            VALUE "ProductName",      "@PROJECT_NAME@"
-            VALUE "ProductVersion",   "@PROJECT_VERSION@"
+            VALUE "FileDescription",  "@SilikoCore_DESCRIPTION@"
+            VALUE "FileVersion",      "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
+            VALUE "InternalName",     "Siliko Core"
+            VALUE "LegalCopyright",   "@SILIKO_CORE_COPYRIGHT@"
+            VALUE "OriginalFilename", SILIKO_CORE_ORIGINAL_FILENAME
+            VALUE "ProductName",      "Siliko Core"
+            VALUE "ProductVersion",   "@SilikoCore_VERSION@@SILIKO_CORE_PRERELEASE_SUFFIX@@SILIKO_CORE_PACKAGE_SUFFIX@"
         END
     END
 
