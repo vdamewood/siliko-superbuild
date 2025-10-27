@@ -137,13 +137,13 @@ set_target_properties(SilikoCore PROPERTIES
 )
 
 configure_file(
-	src/version.c.in
-	${CMAKE_CURRENT_BINARY_DIR}/version.c
+	src/Version.c.in
+	${CMAKE_CURRENT_BINARY_DIR}/Version.c
 	@ONLY
 )
 target_sources(SilikoCore
 	PRIVATE
-		${CMAKE_CURRENT_BINARY_DIR}/version.c
+		${CMAKE_CURRENT_BINARY_DIR}/Version.c
 )
 
 if(WIN32)
