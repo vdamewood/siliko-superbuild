@@ -59,9 +59,6 @@ else()
 	set(DEVELOPMENT_COMPONENT "SilikoCore_Development")
 endif()
 
-
-find_library(LIBM m)
-
 add_library(SilikoCore)
 add_library(Siliko::SilikoCore ALIAS SilikoCore)
 target_sources(SilikoCore
@@ -91,9 +88,41 @@ target_sources(SilikoCore
 		src/Lexer.c
 		src/InfixParser.c
 )
-if(LIBM)
-	target_link_libraries(SilikoCore PRIVATE m)
+
+
+set(SIN_PROGRAM [[
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[])
+{
+	printf("%f\n", sin(atof(argv[1])));
+	return 0;
+}
+]]
+)
+
+include(CMakePushCheckState)
+include(CheckSourceCompiles)
+cmake_push_check_state(RESET)
+check_source_compiles(C "${SIN_PROGRAM}" SILIKO_SIN_WITHOUT_LIBM)
+if(NOT SILIKO_SIN_WITHOUT_LIBM)
+	cmake_reset_check_state()
+	find_library(LIBM m)
+	if (NOT LIBM)
+		message(FATAL_ERROR "Can't use sin() without libm and can't find libm.")
+	endif()
+	set(CMAKE_REQUIRED_LIBRARIES ${LIBM})
+	check_source_compiles(C "${SIN_PROGRAM}" SILIKO_SIN_WITH_LIBM)
+	if(NOT SILIKO_SIN_WITH_LIBM)
+		message(FATAL_ERROR "Can't use sin() with or without libm().")
+	endif()
+	target_link_libraries(SilikoCore PRIVATE "${LIBM}")
 endif()
+cmake_pop_check_state()
+
+
 
 target_compile_features(SilikoCore PRIVATE c_std_11)
 get_target_property(PUBLIC_HEADERS SilikoCore HEADER_SET_HEADERS)
