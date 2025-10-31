@@ -49,16 +49,6 @@ set(SILIKO_CORE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/SilikoCore" CACH
 		"Locaton to install CMake files (ignored if SILIKO_CORE_BUILD_FRAMEWORK is on)"
 )
 
-if(SILIKO_CORE_BUILD_FRAMEWORK)
-	set(CMAKEDIR "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources")
-	set(RUNTIME_COMPONENT "SilikoCore")
-	set(DEVELOPMENT_COMPONENT "SilikoCore")
-else()
-	set(CMAKEDIR "${SILIKO_CORE_INSTALL_CMAKEDIR}")
-	set(RUNTIME_COMPONENT "SilikoCore_Runtime")
-	set(DEVELOPMENT_COMPONENT "SilikoCore_Development")
-endif()
-
 add_library(SilikoCore)
 add_library(Siliko::SilikoCore ALIAS SilikoCore)
 target_sources(SilikoCore
@@ -66,7 +56,6 @@ target_sources(SilikoCore
 		FILE_SET HEADERS
 		BASE_DIRS
 			include
-			${CMAKE_CURRENT_BINARY_DIR}/include
 		FILES
 			include/SilikoCore/Value.h
 			include/SilikoCore/FunctionCaller.h
@@ -77,7 +66,6 @@ target_sources(SilikoCore
 			include/SilikoCore/Lexer.h
 			include/SilikoCore/InfixParser.h
 			include/SilikoCore/Version.h
-			${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
 	PRIVATE
 		src/Functions.h
 		src/Functions.c
@@ -88,53 +76,44 @@ target_sources(SilikoCore
 		src/Lexer.c
 		src/InfixParser.c
 )
+target_compile_features(SilikoCore PRIVATE c_std_11)
+set_target_properties(SilikoCore PROPERTIES
+	C_VISIBILITY_PRESET       hidden
+	VISIBILITY_INLINES_HIDDEN On
+	VERSION                   ${PROJECT_VERSION}
+	SOVERSION                 ${PROJECT_VERSION_MAJOR}
+)
 
-
+# Some systems provide math.h functions in a seperate library called
+# libm. This checks to see if math.h functions work and if they need
+# libm.
 set(SIN_PROGRAM [[
-#include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
 
 int main(int argc, char *argv[])
 {
-	printf("%f\n", sin(atof(argv[1])));
-	return 0;
+	return sin(argc*0.017453292519943295) * 255;
 }
 ]]
 )
-
 include(CMakePushCheckState)
 include(CheckSourceCompiles)
 cmake_push_check_state(RESET)
-check_source_compiles(C "${SIN_PROGRAM}" SILIKO_SIN_WITHOUT_LIBM)
-if(NOT SILIKO_SIN_WITHOUT_LIBM)
+check_source_compiles(C "${SIN_PROGRAM}" CAN_USE_SIN_WITHOUT_LIBM)
+if(NOT CAN_USE_SIN_WITHOUT_LIBM)
 	cmake_reset_check_state()
 	find_library(LIBM m)
 	if (NOT LIBM)
 		message(FATAL_ERROR "Can't use sin() without libm and can't find libm.")
 	endif()
 	set(CMAKE_REQUIRED_LIBRARIES ${LIBM})
-	check_source_compiles(C "${SIN_PROGRAM}" SILIKO_SIN_WITH_LIBM)
-	if(NOT SILIKO_SIN_WITH_LIBM)
+	check_source_compiles(C "${SIN_PROGRAM}" CAN_USE_SIN_WITH_LIBM)
+	if(NOT CAN_USE_SIN_WITH_LIBM)
 		message(FATAL_ERROR "Can't use sin() with or without libm().")
 	endif()
 	target_link_libraries(SilikoCore PRIVATE "${LIBM}")
 endif()
 cmake_pop_check_state()
-
-
-
-target_compile_features(SilikoCore PRIVATE c_std_11)
-get_target_property(PUBLIC_HEADERS SilikoCore HEADER_SET_HEADERS)
-set_target_properties(SilikoCore PROPERTIES
-	PUBLIC_HEADER             "${PUBLIC_HEADERS}"
-	C_VISIBILITY_PRESET       hidden
-	VISIBILITY_INLINES_HIDDEN On
-	FRAMEWORK                 "${SILIKO_CORE_BUILD_FRAMEWORK}"
-	FRAMEWORK_VERSION         ${PROJECT_VERSION}
-	VERSION                   ${PROJECT_VERSION}
-	SOVERSION                 ${PROJECT_VERSION_MAJOR}
-)
 
 configure_file(
 	src/Version.c.in
@@ -145,20 +124,17 @@ target_sources(SilikoCore
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR}/Version.c
 )
-
 if(WIN32)
 	if(SILIKO_CORE_PRERELEASE_SUFFIX STREQUAL "")
 		set(PRERELEASE_FLAG 0)
 	else()
 		set(PRERELEASE_FLAG VS_FF_PRERELEASE)
 	endif()
-
 	configure_file(
 		src/version.rc.in
 		${CMAKE_CURRENT_BINARY_DIR}/version.rc
 		@ONLY
   	)
-
 	target_compile_definitions(SilikoCore
 		PRIVATE
 			"SILIKO_CORE_ORIGINAL_FILENAME=\"$<TARGET_FILE_NAME:SilikoCore>\""
@@ -173,6 +149,38 @@ include(GenerateExportHeader)
 generate_export_header(SilikoCore
 	EXPORT_FILE_NAME include/SilikoCore/Api.h
 )
+target_sources(SilikoCore
+	PUBLIC
+		FILE_SET HEADERS
+		BASE_DIRS
+			${CMAKE_CURRENT_BINARY_DIR}/include
+		FILES
+			${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
+)
+
+#[[
+Ideally, an if statement here wouldn't be needed, but since
+PUBLIC_HEADER is redundant with FILE_SET HEADERS on non-framework
+builds, it can cause conflicts when installing.
+#]]
+if(SILIKO_CORE_BUILD_FRAMEWORK)
+	get_target_property(PUBLIC_HEADERS SilikoCore HEADER_SET_HEADERS)
+	set_target_properties(SilikoCore PROPERTIES
+		FRAMEWORK                 On
+		PUBLIC_HEADER             "${PUBLIC_HEADERS}"
+		FRAMEWORK_VERSION         ${PROJECT_VERSION}
+	)
+
+	set(CMAKECONFIG_DIR        "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources")
+	set(CMAKECONFIG_COMPONENT  "SilikoCore_Framework")
+	set(DOC_DIR                "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources/Documentation")
+	set(DOC_COMPONENT          "SilikoCore_Framework")
+else()
+	set(CMAKECONFIG_DIR        "${SILIKO_CORE_INSTALL_CMAKEDIR}")
+	set(CMAKECONFIG_COMPONENT  "SilikoCore_Development")
+	set(DOC_DIR                "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore")
+	set(DOC_COMPONENT          "SilikoCore_Runtime")
+endif()
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
@@ -185,39 +193,35 @@ install(TARGETS SilikoCore
 	EXPORT SilikoCore
 RUNTIME
 	DESTINATION           "${CMAKE_INSTALL_BINDIR}"
-	COMPONENT             "${RUNTIME_COMPONENT}"
+	COMPONENT             SilikoCore_Runtime
 ARCHIVE
 	DESTINATION           "${CMAKE_INSTALL_LIBDIR}"
-	COMPONENT             "${DEVELOPMENT_COMPONENT}"
+	COMPONENT             SilikoCore_Development
 LIBRARY
 	DESTINATION           "${CMAKE_INSTALL_LIBDIR}"
-	COMPONENT             "${RUNTIME_COMPONENT}"
-	NAMELINK_COMPONENT    "${DEVELOPMENT_COMPONENT}"
+	COMPONENT             SilikoCore_Runtime
+	NAMELINK_COMPONENT    SilikoCore_Development
 FRAMEWORK
 	DESTINATION           "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}"
-	COMPONENT             "${DEVELOPMENT_COMPONENT}"
+	COMPONENT             SilikoCore_Framework
 FILE_SET HEADERS
-	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}/SilikoCore"
-	COMPONENT             "${DEVELOPMENT_COMPONENT}"
+	DESTINATION           "${CMAKE_INSTALL_INCLUDEDIR}"
+	COMPONENT             SilikoCore_Development
 )
 install(EXPORT SilikoCore
 	NAMESPACE             Siliko::
 	FILE                  SilikoCoreTarget.cmake
-	DESTINATION           "${CMAKEDIR}"
-	COMPONENT             "${DEVELOPMENT_COMPONENT}"
+	DESTINATION           "${CMAKECONFIG_DIR}"
+	COMPONENT             "${CMAKECONFIG_COMPONENT}"
 )
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/SilikoCoreConfigVersion.cmake"
 		"SilikoCoreConfig.cmake"
-	DESTINATION           "${CMAKEDIR}"
-	COMPONENT             "${DEVELOPMENT_COMPONENT}"
-)
-install(FILES
-		"${PROJECT_SOURCE_DIR}/Readme.md"
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore"
-	COMPONENT "${RUNTIME_COMPONENT}"
+	DESTINATION           "${CMAKECONFIG_DIR}"
+	COMPONENT             "${CMAKECONFIG_COMPONENT}"
 )
 
 install(FILES
+		"${PROJECT_SOURCE_DIR}/Readme.md"
 		"${PROJECT_SOURCE_DIR}/License.md"
 		"${PROJECT_SOURCE_DIR}/License.Gpl.md"
 	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore"
