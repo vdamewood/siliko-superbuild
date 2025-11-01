@@ -52,20 +52,6 @@ set(SILIKO_CORE_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/SilikoCore" CACH
 add_library(SilikoCore)
 add_library(Siliko::SilikoCore ALIAS SilikoCore)
 target_sources(SilikoCore
-	PUBLIC
-		FILE_SET HEADERS
-		BASE_DIRS
-			include
-		FILES
-			include/SilikoCore/Value.h
-			include/SilikoCore/FunctionCaller.h
-			include/SilikoCore/SyntaxTree.h
-			include/SilikoCore/DataSource.h
-			include/SilikoCore/StringSource.h
-			include/SilikoCore/Token.h
-			include/SilikoCore/Lexer.h
-			include/SilikoCore/InfixParser.h
-			include/SilikoCore/Version.h
 	PRIVATE
 		src/Functions.h
 		src/Functions.c
@@ -124,6 +110,63 @@ target_sources(SilikoCore
 	PRIVATE
 		${CMAKE_CURRENT_BINARY_DIR}/Version.c
 )
+
+include(GenerateExportHeader)
+generate_export_header(SilikoCore
+	EXPORT_FILE_NAME include/SilikoCore/Api.h
+)
+
+set(PUBLIC_HEADER
+	include/SilikoCore/Value.h
+	include/SilikoCore/FunctionCaller.h
+	include/SilikoCore/SyntaxTree.h
+	include/SilikoCore/DataSource.h
+	include/SilikoCore/StringSource.h
+	include/SilikoCore/Token.h
+	include/SilikoCore/Lexer.h
+	include/SilikoCore/InfixParser.h
+	include/SilikoCore/Version.h
+	${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
+)
+if (SILIKO_CORE_BUILD_FRAMEWORK)
+	target_sources(SilikoCore
+		PRIVATE
+			${PUBLIC_HEADERS}
+	)
+
+	set_target_properties(SilikoCore PROPERTIES
+		FRAMEWORK                 On
+		PUBLIC_HEADER             "${PUBLIC_HEADERS}"
+		FRAMEWORK_VERSION         ${PROJECT_VERSION}
+	)
+
+	target_include_directories(SilikoCore
+		PUBLIC
+			"$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
+			"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+	)
+
+	set(CMAKECONFIG_DIR        "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources")
+	set(CMAKECONFIG_COMPONENT  "SilikoCore_Framework")
+	set(DOC_DIR                "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources/Documentation")
+	set(DOC_COMPONENT          "SilikoCore_Framework")
+else()
+	target_sources(SilikoCore
+		PUBLIC
+			FILE_SET HEADERS
+			BASE_DIRS
+				include
+				${CMAKE_CURRENT_BINARY_DIR}/include
+			FILES
+				${PUBLIC_HEADERS}
+	)
+
+	set(CMAKECONFIG_DIR        "${SILIKO_CORE_INSTALL_CMAKEDIR}")
+	set(CMAKECONFIG_COMPONENT  "SilikoCore_Development")
+	set(DOC_DIR                "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore")
+	set(DOC_COMPONENT          "SilikoCore_Runtime")
+endif()
+
 if(WIN32)
 	if(SILIKO_CORE_PRERELEASE_SUFFIX STREQUAL "")
 		set(PRERELEASE_FLAG 0)
@@ -143,43 +186,6 @@ if(WIN32)
 		PRIVATE
 			"${CMAKE_CURRENT_BINARY_DIR}/version.rc"
 	)
-endif()
-
-include(GenerateExportHeader)
-generate_export_header(SilikoCore
-	EXPORT_FILE_NAME include/SilikoCore/Api.h
-)
-target_sources(SilikoCore
-	PUBLIC
-		FILE_SET HEADERS
-		BASE_DIRS
-			${CMAKE_CURRENT_BINARY_DIR}/include
-		FILES
-			${CMAKE_CURRENT_BINARY_DIR}/include/SilikoCore/Api.h
-)
-
-#[[
-Ideally, an if statement here wouldn't be needed, but since
-PUBLIC_HEADER is redundant with FILE_SET HEADERS on non-framework
-builds, it can cause conflicts when installing.
-#]]
-if(SILIKO_CORE_BUILD_FRAMEWORK)
-	get_target_property(PUBLIC_HEADERS SilikoCore HEADER_SET_HEADERS)
-	set_target_properties(SilikoCore PROPERTIES
-		FRAMEWORK                 On
-		PUBLIC_HEADER             "${PUBLIC_HEADERS}"
-		FRAMEWORK_VERSION         ${PROJECT_VERSION}
-	)
-
-	set(CMAKECONFIG_DIR        "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources")
-	set(CMAKECONFIG_COMPONENT  "SilikoCore_Framework")
-	set(DOC_DIR                "${SILIKO_CORE_INSTALL_FRAMEWORKDIR}/SilikoCore.framework/Resources/Documentation")
-	set(DOC_COMPONENT          "SilikoCore_Framework")
-else()
-	set(CMAKECONFIG_DIR        "${SILIKO_CORE_INSTALL_CMAKEDIR}")
-	set(CMAKECONFIG_COMPONENT  "SilikoCore_Development")
-	set(DOC_DIR                "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore")
-	set(DOC_COMPONENT          "SilikoCore_Runtime")
 endif()
 
 include(CMakePackageConfigHelpers)
@@ -224,8 +230,8 @@ install(FILES
 		"${PROJECT_SOURCE_DIR}/Readme.md"
 		"${PROJECT_SOURCE_DIR}/License.md"
 		"${PROJECT_SOURCE_DIR}/License.Gpl.md"
-	DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/SilikoCore"
-	COMPONENT "${RUNTIME_COMPONENT}"
+	DESTINATION "${DOC_DIR}"
+	COMPONENT "${DOC_COMPONENT}"
 )
 
 function(siliko_core_fixup_bundle TGT)
