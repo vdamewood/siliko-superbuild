@@ -381,7 +381,7 @@ struct SilikoValue SilikoFunction_ceil(int argc, struct SilikoValue *argv)
 		input = argv[0].Float;
 
 	result = ceil(input);
-	if (result <= INT_MAX && result >= INT_MIN)
+	if (result <= LLONG_MAX && result >= LLONG_MIN)
 	{
 		rVal.Status = SILIKO_VAL_INTEGER;
 		rVal.Integer = (long long int)result;
@@ -475,7 +475,7 @@ struct SilikoValue SilikoFunction_floor(int argc, struct SilikoValue *argv)
 		input = argv[0].Float;
 
 	result = floor(input);
-	if (result <= INT_MAX && result >= INT_MIN)
+	if (result <= LLONG_MAX && result >= LLONG_MIN)
 	{
 		rVal.Status = SILIKO_VAL_INTEGER;
 		rVal.Integer = (long long int)result;
