@@ -62,7 +62,7 @@ target_sources(SilikoCore
 		src/Lexer.c
 		src/InfixParser.c
 )
-target_compile_features(SilikoCore PRIVATE c_std_11)
+target_compile_features(SilikoCore PRIVATE c_std_17)
 set_target_properties(SilikoCore PROPERTIES
 	C_VISIBILITY_PRESET       hidden
 	VISIBILITY_INLINES_HIDDEN On
