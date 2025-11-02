@@ -116,7 +116,7 @@ generate_export_header(SilikoCore
 	EXPORT_FILE_NAME include/SilikoCore/Api.h
 )
 
-set(PUBLIC_HEADER
+set(PUBLIC_HEADERS
 	include/SilikoCore/Value.h
 	include/SilikoCore/FunctionCaller.h
 	include/SilikoCore/SyntaxTree.h
