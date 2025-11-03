@@ -39,13 +39,31 @@ find_program(IBTOOL ibtool)
 if (NOT IBTOOL)
 	message(FATAL_ERROR "Command ibtool not found. Can't build GUI. Quitting.")
 endif()
+find_program(ACTOOL actool)
+if (NOT IBTOOL)
+	message(FATAL_ERROR "Command actool not found. Can't build icon. Quitting.")
+endif()
 
 add_custom_command(OUTPUT MainMenu.nib
 	COMMAND "${IBTOOL}" --compile MainMenu.nib "${CMAKE_CURRENT_SOURCE_DIR}/src/MainMenu.xib"
 	COMMENT "Compiling ${CMAKE_CURRENT_SOURCE_DIR}/src/MainMenu.xib"
 )
 set_source_files_properties(MainMenu.nib PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-set_source_files_properties(src/siliko-gui-macos.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+add_custom_command(OUTPUT
+	Assets.car
+	SilikoIcon.icns
+COMMAND ACTOOL
+	--platform macosx
+	--minimum-deployment-target 14.0
+	--output-partial-info-plist /dev/null
+	--compile ${CMAKE_CURRENT_BINARY_DIR}
+	--app-icon SilikoIcon
+	${CMAKE_CURRENT_SOURCE_DIR}/src/SilikoIcon.icon
+COMMENT "Compiling application icon"
+)
+set_source_files_properties(Assets.car PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+set_source_files_properties(SilikoIcon.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 add_executable(SilikoGuiMacOS MACOSX_BUNDLE)
 target_sources(SilikoGuiMacOS
@@ -54,7 +72,8 @@ target_sources(SilikoGuiMacOS
 		src/Delegate.m
 		src/Main.m
 		MainMenu.nib
-		src/siliko-gui-macos.icns
+		SilikoIcon.icns
+		Assets.car
 )
 set_target_properties(SilikoGuiMacOS PROPERTIES
 	OUTPUT_NAME                         "Siliko GUI"
@@ -63,7 +82,7 @@ set_target_properties(SilikoGuiMacOS PROPERTIES
 	MACOSX_BUNDLE_SHORT_VERSION_STRING  ${PROJECT_VERSION}
 	MACOSX_BUNDLE_BUNDLE_VERSION        ${PROJECT_VERSION}
 	MACOSX_BUNDLE_COPYRIGHT             "${SILIKO_GUI_MACOS_BUNDLE_COPYRIGHT}"
-	MACOSX_BUNDLE_ICON_FILE             siliko-gui-macos.icns
+	MACOSX_BUNDLE_ICON_FILE             SilikoIcon
 	MACOSX_BUNDLE_INFO_PLIST            "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist.in"
 )
 target_compile_options(SilikoGuiMacOS
