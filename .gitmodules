@@ -1,0 +1,15 @@
+[submodule "siliko"]
+	path = siliko
+	url = https://github.com/vdamewood/siliko
+[submodule "siliko-calc-cli"]
+	path = siliko-calc-cli
+	url = https://github.com/vdamewood/siliko-calc-cli
+[submodule "siliko-calc-cocoa"]
+	path = siliko-calc-cocoa
+	url = https://github.com/vdamewood/siliko-calc-cocoa
+[submodule "siliko-calc-gtk"]
+	path = siliko-calc-gtk
+	url = https://github.com/vdamewood/siliko-calc-gtk
+[submodule "siliko-calc-winapi"]
+	path = siliko-calc-winapi
+	url = https://github.com/vdamewood/siliko-calc-winapi

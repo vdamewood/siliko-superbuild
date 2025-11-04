@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=Siliko GUI
-Comment=Math parser and calculator
-Type=Application
-Exec=siliko-gui-gnome
-Icon=siliko-gui-gnome
-Terminal=false
-Categories=GTK;Utility

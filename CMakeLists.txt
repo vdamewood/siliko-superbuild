@@ -16,24 +16,24 @@
 
 cmake_minimum_required(VERSION 3.18)
 
-option(SILIKO_BUILD_CLI  "Build a command-line interface for Siliko" On)
-option(SILIKO_BUILD_GUI  "Build a GUI interface for Siliko" On)
+option(SILIKO_BUILD_CLI  "Build siliko-calc command-line tool" On)
+option(SILIKO_BUILD_GUI  "Build siliko-calc GUI app for the current system" On)
 
-project(Siliko)
+project(SilikoSuperBuild)
 
-add_subdirectory(siliko-core)
+add_subdirectory(siliko)
 
 if(SILIKO_BUILD_CLI)
-	add_subdirectory(siliko-cli)
+	add_subdirectory(siliko-calc-cli)
 endif()
 
 if(SILIKO_BUILD_GUI)
 	if(APPLE)
-		add_subdirectory(siliko-gui-macos)
+		add_subdirectory(siliko-calc-cocoa)
 	elseif(UNIX)
-		add_subdirectory(siliko-gui-gnome)
+		add_subdirectory(siliko-calc-gtk)
 	elseif(WIN32)
-		add_subdirectory(siliko-gui-windows)
+		add_subdirectory(siliko-calc-winapi)
 	else()
 		message(FATAL_ERROR "A GUI program is not available for this system.")
 	endif()
