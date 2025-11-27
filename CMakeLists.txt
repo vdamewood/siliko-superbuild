@@ -21,6 +21,8 @@ option(SILIKO_BUILD_GUI  "Build siliko-calc GUI app for the current system" On)
 
 project(SilikoSuperBuild)
 
+include(CTest)
+
 add_subdirectory(siliko)
 
 if(SILIKO_BUILD_CLI)
