@@ -14,10 +14,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this library. If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.30)
 
-option(SILIKO_BUILD_CLI  "Build siliko-calc command-line tool" On)
-option(SILIKO_BUILD_GUI  "Build siliko-calc GUI app for the current system" On)
+option(BUILD_CLI    "Build calculator command-line tool"   Off)
+option(BUILD_COCOA  "Build calculator GUI app for macOS"   Off)
+option(BUILD_GTK    "Build calculator GUI app for GNOME"   Off)
+option(BUILD_WINAPI "Build calculator GUI app for Windows" Off)
 
 project(SilikoSuperBuild)
 
@@ -25,18 +27,18 @@ include(CTest)
 
 add_subdirectory(siliko)
 
-if(SILIKO_BUILD_CLI)
+if(BUILD_CLI)
 	add_subdirectory(siliko-calc-cli)
 endif()
 
-if(SILIKO_BUILD_GUI)
-	if(APPLE)
-		add_subdirectory(siliko-calc-cocoa)
-	elseif(UNIX)
-		add_subdirectory(siliko-calc-gtk)
-	elseif(WIN32)
-		add_subdirectory(siliko-calc-winapi)
-	else()
-		message(FATAL_ERROR "A GUI program is not available for this system.")
-	endif()
+if(BUILD_COCOA)
+	add_subdirectory(siliko-calc-cocoa)
+endif()
+
+if(BUILD_GTK)
+	add_subdirectory(siliko-calc-gtk)
+endif()
+
+if(BUILD_WINAPI)
+	add_subdirectory(siliko-calc-winapi)
 endif()
